@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+
+{% block title %}Email Drafts - SMTP Web{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2><i class="fas fa-file-alt me-2"></i>Drafts</h2>
+                    <p class="text-muted mb-0">Your saved draft emails</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-primary" onclick="refreshDrafts()">
+                        <i class="fas fa-sync me-2"></i>Refresh
+                    </button>
+                    <a href="{{ url_for('email_compose') }}" class="btn btn-primary">
+                        <i class="fas fa-pen me-2"></i>New Draft
+                    </a>
+                </div>
+            </div>
+
+            <!-- Draft Filters -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-4">
+                            <select class="form-select" id="accountFilter" onchange="filterDrafts()">
+                                <option value="all">All Accounts</option>
+                                {% for account in accounts %}
+                                <option value="{{ account.id }}">{{ account.name }} ({{ account.email_address }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="searchInput" placeholder="Search drafts..." onkeyup="searchDrafts()">
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-outline-secondary w-100" onclick="clearFilters()">
+                                <i class="fas fa-times me-2"></i>Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Drafts List -->
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                        <label class="form-check-label" for="selectAll">
+                            Select All
+                        </label>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="editSelected()">
+                            <i class="fas fa-edit me-1"></i>Edit
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteSelected()">
+                            <i class="fas fa-trash me-1"></i>Delete
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    {% if drafts %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <tbody>
+                                {% for draft in drafts %}
+                                <tr class="draft-row" data-draft-id="{{ draft.id }}">
+                                    <td style="width: 40px;">
+                                        <div class="form-check">
+                                            <input class="form-check-input draft-checkbox" type="checkbox" value="{{ draft.id }}">
+                                        </div>
+                                    </td>
+                                    <td style="width: 60px;">
+                                        <div class="text-center">
+                                            <i class="fas fa-file-alt text-muted"></i>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div class="flex-grow-1">
+                                                <div class="fw-bold text-truncate" style="max-width: 200px;">
+                                                    {{ draft.to or 'No recipient' }}
+                                                </div>
+                                                <div class="text-muted small">
+                                                    From: {{ draft.from_address }}
+                                                </div>
+                                            </div>
+                                            <div class="text-end">
+                                                <div class="small text-muted">
+                                                    {{ draft.created_at.strftime('%b %d, %Y %I:%M %p') if draft.created_at else 'Unknown' }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mt-1">
+                                            <div class="fw-semibold text-truncate" style="max-width: 400px;">
+                                                {{ draft.subject or 'No subject' }}
+                                            </div>
+                                            <div class="text-muted small text-truncate" style="max-width: 500px;">
+                                                {{ draft.body_preview or 'No content' }}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td style="width: 120px;">
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ url_for('email_compose', draft_id=draft.id) }}" class="btn btn-sm btn-outline-primary" title="Edit Draft">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteDraft('{{ draft.id }}')" title="Delete Draft">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No drafts found</h5>
+                        <p class="text-muted">You haven't saved any draft emails yet.</p>
+                        <a href="{{ url_for('email_compose') }}" class="btn btn-primary">
+                            <i class="fas fa-pen me-2"></i>Create New Draft
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function refreshDrafts() {
+    location.reload();
+}
+
+function filterDrafts() {
+    const accountFilter = document.getElementById('accountFilter').value;
+    const searchInput = document.getElementById('searchInput').value.toLowerCase();
+    const rows = document.querySelectorAll('.draft-row');
+    
+    rows.forEach(row => {
+        const draftId = row.dataset.draftId;
+        const text = row.textContent.toLowerCase();
+        const accountMatch = accountFilter === 'all' || row.dataset.accountId === accountFilter;
+        const searchMatch = searchInput === '' || text.includes(searchInput);
+        
+        row.style.display = accountMatch && searchMatch ? '' : 'none';
+    });
+}
+
+function searchDrafts() {
+    filterDrafts();
+}
+
+function clearFilters() {
+    document.getElementById('accountFilter').value = 'all';
+    document.getElementById('searchInput').value = '';
+    filterDrafts();
+}
+
+function toggleSelectAll() {
+    const selectAll = document.getElementById('selectAll');
+    const checkboxes = document.querySelectorAll('.draft-checkbox');
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = selectAll.checked;
+    });
+}
+
+function editSelected() {
+    const selected = document.querySelectorAll('.draft-checkbox:checked');
+    if (selected.length === 0) {
+        alert('Please select at least one draft to edit.');
+        return;
+    }
+    if (selected.length > 1) {
+        alert('Please select only one draft to edit.');
+        return;
+    }
+    
+    const draftId = selected[0].value;
+    window.location.href = `{{ url_for('email_compose') }}?draft_id=${draftId}`;
+}
+
+function deleteSelected() {
+    const selected = document.querySelectorAll('.draft-checkbox:checked');
+    if (selected.length === 0) {
+        alert('Please select at least one draft to delete.');
+        return;
+    }
+    
+    if (confirm(`Are you sure you want to delete ${selected.length} draft(s)?`)) {
+        const draftIds = Array.from(selected).map(cb => cb.value);
+        // Implement bulk delete API call here
+        console.log('Deleting drafts:', draftIds);
+    }
+}
+
+function deleteDraft(draftId) {
+    if (confirm('Are you sure you want to delete this draft?')) {
+        // Implement single delete API call here
+        console.log('Deleting draft:', draftId);
+    }
+}
+</script>
+{% endblock %}

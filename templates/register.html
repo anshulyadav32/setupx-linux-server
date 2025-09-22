@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - SMTP Web Interface</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .register-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 450px;
+            width: 100%;
+        }
+        
+        .register-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .register-header h2 {
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .register-header p {
+            margin: 0.5rem 0 0 0;
+            opacity: 0.9;
+        }
+        
+        .register-body {
+            padding: 2rem;
+        }
+        
+        .form-floating {
+            margin-bottom: 1rem;
+        }
+        
+        .form-control {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .form-control.is-valid {
+            border-color: #198754;
+        }
+        
+        .form-control.is-invalid {
+            border-color: #dc3545;
+        }
+        
+        .btn-register {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+        
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #dee2e6;
+        }
+        
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+        
+        .password-requirements {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .password-requirements h6 {
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        
+        .requirement {
+            color: #6c757d;
+            margin-bottom: 0.25rem;
+        }
+        
+        .requirement.valid {
+            color: #198754;
+        }
+        
+        .requirement i {
+            width: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <h2>
+                <i class="fas fa-user-plus me-2"></i>
+                Create Account
+            </h2>
+            <p>Join SMTP Web Interface</p>
+        </div>
+        
+        <div class="register-body">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ 'danger' if category == 'error' else 'success' if category == 'success' else 'info' }} alert-dismissible fade show" role="alert">
+                            <i class="fas fa-{{ 'exclamation-triangle' if category == 'error' else 'check-circle' if category == 'success' else 'info-circle' }} me-2"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <form method="POST" action="{{ url_for('register') }}" id="registerForm">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Username" required minlength="3" maxlength="50">
+                    <label for="username">
+                        <i class="fas fa-user me-2"></i>Username
+                    </label>
+                    <div class="invalid-feedback">
+                        Username must be 3-50 characters long.
+                    </div>
+                </div>
+                
+                <div class="form-floating">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                    <label for="email">
+                        <i class="fas fa-envelope me-2"></i>Email Address
+                    </label>
+                    <div class="invalid-feedback">
+                        Please provide a valid email address.
+                    </div>
+                </div>
+                
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required minlength="6">
+                    <label for="password">
+                        <i class="fas fa-lock me-2"></i>Password
+                    </label>
+                    <div class="invalid-feedback">
+                        Password must be at least 6 characters long.
+                    </div>
+                </div>
+                
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+                    <label for="confirm_password">
+                        <i class="fas fa-lock me-2"></i>Confirm Password
+                    </label>
+                    <div class="invalid-feedback">
+                        Passwords do not match.
+                    </div>
+                </div>
+                
+                <!-- Password Requirements -->
+                <div class="password-requirements">
+                    <h6><i class="fas fa-shield-alt me-1"></i> Password Requirements</h6>
+                    <div class="requirement" id="req-length">
+                        <i class="fas fa-times text-danger"></i> At least 6 characters
+                    </div>
+                    <div class="requirement" id="req-match">
+                        <i class="fas fa-times text-danger"></i> Passwords match
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-register w-100" id="submitBtn" disabled>
+                    <i class="fas fa-user-plus me-2"></i>
+                    Create Account
+                </button>
+            </form>
+            
+            <div class="divider">
+                <span>or</span>
+            </div>
+            
+            <div class="login-link">
+                <p class="mb-0">Already have an account? 
+                    <a href="{{ url_for('login') }}">
+                        <i class="fas fa-sign-in-alt me-1"></i>Sign In
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Form validation
+        const form = document.getElementById('registerForm');
+        const username = document.getElementById('username');
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm_password');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        // Password requirements elements
+        const reqLength = document.getElementById('req-length');
+        const reqMatch = document.getElementById('req-match');
+        
+        function updateRequirement(element, valid) {
+            const icon = element.querySelector('i');
+            if (valid) {
+                icon.className = 'fas fa-check text-success';
+                element.classList.add('valid');
+            } else {
+                icon.className = 'fas fa-times text-danger';
+                element.classList.remove('valid');
+            }
+        }
+        
+        function validateForm() {
+            const isUsernameValid = username.value.length >= 3 && username.value.length <= 50;
+            const isEmailValid = email.validity.valid;
+            const isPasswordValid = password.value.length >= 6;
+            const isConfirmValid = password.value === confirmPassword.value && confirmPassword.value.length > 0;
+            
+            // Update visual feedback
+            username.classList.toggle('is-valid', isUsernameValid);
+            username.classList.toggle('is-invalid', !isUsernameValid && username.value.length > 0);
+            
+            email.classList.toggle('is-valid', isEmailValid);
+            email.classList.toggle('is-invalid', !isEmailValid && email.value.length > 0);
+            
+            password.classList.toggle('is-valid', isPasswordValid);
+            password.classList.toggle('is-invalid', !isPasswordValid && password.value.length > 0);
+            
+            confirmPassword.classList.toggle('is-valid', isConfirmValid);
+            confirmPassword.classList.toggle('is-invalid', !isConfirmValid && confirmPassword.value.length > 0);
+            
+            // Update requirements
+            updateRequirement(reqLength, isPasswordValid);
+            updateRequirement(reqMatch, isConfirmValid);
+            
+            // Enable/disable submit button
+            const allValid = isUsernameValid && isEmailValid && isPasswordValid && isConfirmValid;
+            submitBtn.disabled = !allValid;
+            
+            return allValid;
+        }
+        
+        // Add event listeners
+        [username, email, password, confirmPassword].forEach(input => {
+            input.addEventListener('input', validateForm);
+            input.addEventListener('blur', validateForm);
+        });
+        
+        // Form submission
+        form.addEventListener('submit', function(e) {
+            if (!validateForm()) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+        
+        // Auto-dismiss alerts after 5 seconds
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+        
+        // Focus on username field
+        username.focus();
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{
+  "smtp_server": {
+    "host": "localhost",
+    "port": 2525,
+    "use_tls": false,
+    "use_ssl": false
+  },
+  "web_interface": {
+    "host": "localhost",
+    "port": 5000,
+    "debug": true
+  },
+  "email_storage": {
+    "type": "file",
+    "path": "data/emails"
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/app.log"
+  },
+  "domains": {
+    "enabled": true,
+    "default_domain": "localhost",
+    "allowed_domains": [
+      "localhost",
+      "example.com"
+    ],
+    "domain_validation": {
+      "check_mx_records": false,
+      "check_dns": false,
+      "allow_subdomains": true
+    },
+    "relay_settings": {
+      "enable_relay": false,
+      "relay_host": "",
+      "relay_port": 587,
+      "relay_username": "",
+      "relay_password": ""
+    }
+  }
+}

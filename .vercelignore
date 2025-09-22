@@ -1,0 +1,65 @@
+# Vercel ignore file - exclude these from deployment
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Local development files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs/
+*.log
+
+# Database files (use external database in production)
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Session files (use external session store in production)
+data/sessions/
+
+# Uploaded files (use external storage in production)
+uploads/
+received_emails/
+
+# Development tools
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+*.md
+!README.md
+
+# Examples and tests
+examples/
+tests/
+test_*.py
+
+# Batch files
+*.bat
+
+# Old requirements
+web_requirements.txt

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SMTP Web Interface{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --sidebar-width: 280px;
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #0dcaf0;
+            --navbar-height: 60px;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f8f9fa;
+            padding-top: var(--navbar-height);
+        }
+
+        /* Top Navigation Bar */
+        .top-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--navbar-height);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            z-index: 1050;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .navbar-toggler {
+            border: none;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.85%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='m4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: var(--navbar-height);
+            left: 0;
+            height: calc(100vh - var(--navbar-height));
+            width: var(--sidebar-width);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+
+        @media (max-width: 767.98px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+        }
+        
+        .sidebar-header {
+            padding: 1.5rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-header h4 {
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+        
+        .nav-item {
+            margin: 0.25rem 0;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85);
+            padding: 0.875rem 1.5rem;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .nav-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-left-color: rgba(255, 255, 255, 0.7);
+            transform: translateX(2px);
+        }
+        
+        .nav-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.25);
+            border-left-color: #ffc107;
+            font-weight: 600;
+        }
+        
+        .nav-link i {
+            width: 20px;
+            margin-right: 0.75rem;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .nav-section-title {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 1rem 1.5rem 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .nav-section-title:first-child {
+            margin-top: 0;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: calc(100vh - var(--navbar-height));
+            padding: 2rem;
+            transition: margin-left 0.3s ease;
+        }
+
+        @media (max-width: 767.98px) {
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+            }
+        }
+
+        /* User Profile Section */
+        .user-profile-section {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: auto;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .user-details {
+            flex-grow: 1;
+        }
+
+        .username {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.125rem;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-user-action {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.8rem;
+            border-radius: 0.375rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.9);
+            background: transparent;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-user-action:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .card {
+            border: none;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border-radius: 0.5rem;
+        }
+        
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid #dee2e6;
+            font-weight: 600;
+        }
+        
+        .stats-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        
+        .stats-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .email-item {
+            transition: background-color 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .email-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .email-item.unread {
+            font-weight: 600;
+            background-color: #fff3cd;
+            transition: all 0.3s ease;
+        }
+        .email-item:hover {
+            border-left-color: #764ba2;
+            background-color: #f8f9fa;
+        }
+        .badge-new {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        }
+        .stats-card {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+        }
+        .compose-card {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Top Navigation Bar -->
+            <nav class="navbar navbar-expand-lg navbar-dark fixed-top" aria-label="Main navigation">
+                <div class="container-fluid">
+                    <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <a class="navbar-brand d-md-none" href="{{ url_for('index') }}">
+                        <i class="fas fa-envelope me-2"></i>
+                        SMTP Web
+                    </a>
+                    <div class="navbar-nav ms-auto d-md-none">
+                        {% if current_user %}
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-1"></i>
+                                {{ current_user.username }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{{ url_for('profile') }}"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse" id="sidebarMenu" aria-label="Sidebar navigation">
+                <div class="sidebar-sticky">
+                    <div class="sidebar-header">
+                        <h4 class="text-white mb-0">
+                            <i class="fas fa-envelope me-2" aria-hidden="true"></i>
+                            SMTP Web
+                        </h4>
+                    </div>
+                    
+                    <div class="sidebar-nav">
+                        <!-- Main Navigation -->
+                        <div class="nav-section-title">Main</div>
+                        <ul class="nav flex-column" role="list">
+                            <li class="nav-item" role="listitem">
+                                <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" 
+                                   href="{{ url_for('index') }}" 
+                                   aria-current="{% if request.endpoint == 'index' %}page{% endif %}">
+                                    <i class="fas fa-tachometer-alt" aria-hidden="true"></i>
+                                    Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item" role="listitem">
+                                <a class="nav-link {% if request.endpoint == 'list_emails' %}active{% endif %}" 
+                                   href="{{ url_for('list_emails') }}"
+                                   aria-current="{% if request.endpoint == 'list_emails' %}page{% endif %}">
+                                    <i class="fas fa-inbox" aria-hidden="true"></i>
+                                    Inbox
+                                </a>
+                            </li>
+                            <li class="nav-item" role="listitem">
+                                <a class="nav-link {% if request.endpoint == 'compose' %}active{% endif %}" 
+                                   href="{{ url_for('compose') }}"
+                                   aria-current="{% if request.endpoint == 'compose' %}page{% endif %}">
+                                    <i class="fas fa-edit" aria-hidden="true"></i>
+                                    Compose
+                                </a>
+                            </li>
+                            <li class="nav-item" role="listitem">
+                                <a class="nav-link {% if request.endpoint == 'settings' %}active{% endif %}" 
+                                   href="{{ url_for('settings') }}"
+                                   aria-current="{% if request.endpoint == 'settings' %}page{% endif %}">
+                                    <i class="fas fa-cog" aria-hidden="true"></i>
+                                    Settings
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- Email Management Navigation -->
+                        <div class="nav-section-title">Email Management</div>
+                        <ul class="nav flex-column" role="list">
+                            <li class="nav-item" role="listitem">
+                                <a class="nav-link {% if request.endpoint == 'email_accounts' %}active{% endif %}" 
+                                   href="{{ url_for('email_accounts') }}"
+                                   aria-current="{% if request.endpoint == 'email_accounts' %}page{% endif %}">
+                                    <i class="fas fa-user-circle" aria-hidden="true"></i>
+                                    Email Accounts
+                                </a>
+                            </li>
+                            <li class="nav-item" role="listitem">
+                                <a class="nav-link {% if request.endpoint == 'email_inbox' %}active{% endif %}" 
+                                   href="{{ url_for('email_inbox') }}"
+                                   aria-current="{% if request.endpoint == 'email_inbox' %}page{% endif %}">
+                                    <i class="fas fa-envelope" aria-hidden="true"></i>
+                                    Gmail & Outlook
+                                </a>
+                            </li>
+                            <li class="nav-item" role="listitem">
+                                <a class="nav-link {% if request.endpoint == 'email_compose' %}active{% endif %}" 
+                                   href="{{ url_for('email_compose') }}"
+                                   aria-current="{% if request.endpoint == 'email_compose' %}page{% endif %}">
+                                    <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                                    Send Email
+                                </a>
+                            </li>
+                            <li class="nav-item" role="listitem">
+                                <a class="nav-link {% if request.endpoint == 'email_drafts' %}active{% endif %}" 
+                                   href="{{ url_for('email_drafts') }}"
+                                   aria-current="{% if request.endpoint == 'email_drafts' %}page{% endif %}">
+                                    <i class="fas fa-file-alt" aria-hidden="true"></i>
+                                    Drafts
+                                </a>
+                            </li>
+                            <li class="nav-item" role="listitem">
+                                <a class="nav-link {% if request.endpoint == 'email_sent' %}active{% endif %}" 
+                                   href="{{ url_for('email_sent') }}"
+                                   aria-current="{% if request.endpoint == 'email_sent' %}page{% endif %}">
+                                    <i class="fas fa-share" aria-hidden="true"></i>
+                                    Sent
+                                </a>
+                            </li>
+                            <li class="nav-item" role="listitem">
+                                <a class="nav-link {% if request.endpoint == 'email_trash' %}active{% endif %}" 
+                                   href="{{ url_for('email_trash') }}"
+                                   aria-current="{% if request.endpoint == 'email_trash' %}page{% endif %}">
+                                    <i class="fas fa-trash" aria-hidden="true"></i>
+                                    Trash
+                                </a>
+                            </li>
+                        </ul>
+
+                        {% if current_user and current_user.is_admin %}
+                        <!-- Admin Navigation -->
+                        <div class="nav-section-title">Administration</div>
+                        <ul class="nav flex-column" role="list">
+                            <li class="nav-item" role="listitem">
+                                <a class="nav-link {% if request.endpoint == 'admin_users' %}active{% endif %}" 
+                                   href="{{ url_for('admin_users') }}"
+                                   aria-current="{% if request.endpoint == 'admin_users' %}page{% endif %}">
+                                    <i class="fas fa-users" aria-hidden="true"></i>
+                                    User Management
+                                </a>
+                            </li>
+                            <li class="nav-item" role="listitem">
+                                <a class="nav-link {% if request.endpoint == 'admin_domains' %}active{% endif %}" 
+                                   href="{{ url_for('admin_domains') }}"
+                                   aria-current="{% if request.endpoint == 'admin_domains' %}page{% endif %}">
+                                    <i class="fas fa-globe" aria-hidden="true"></i>
+                                    Domain Management
+                                </a>
+                            </li>
+                        </ul>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- User Profile Section -->
+                    {% if current_user %}
+                    <div class="user-profile-section">
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                <i class="fas fa-user" aria-hidden="true"></i>
+                            </div>
+                            <div class="user-details">
+                                <div class="username">{{ current_user.username }}</div>
+                                {% if current_user.is_admin %}
+                                <div class="user-role">Administrator</div>
+                                {% else %}
+                                <div class="user-role">User</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="user-actions">
+                            <a href="{{ url_for('profile') }}" class="btn-user-action" aria-label="View profile">
+                                <i class="fas fa-user me-1" aria-hidden="true"></i>
+                                Profile
+                            </a>
+                            <a href="{{ url_for('logout') }}" class="btn-user-action" aria-label="Logout">
+                                <i class="fas fa-sign-out-alt me-1" aria-hidden="true"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+                <div class="pt-3 pb-2 mb-3">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show" role="alert">
+                                    <i class="fas fa-{{ 'exclamation-triangle' if category == 'error' else 'check-circle' }} me-2"></i>
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    
+                    {% block content %}{% endblock %}
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto-refresh inbox every 30 seconds
+        if (window.location.pathname === '/emails' || window.location.pathname === '/') {
+            setInterval(function() {
+                // Only refresh if user is not actively interacting
+                if (document.hidden === false) {
+                    location.reload();
+                }
+            }, 30000);
+        }
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

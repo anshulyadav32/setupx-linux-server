@@ -1,0 +1,11 @@
+{
+  "client_id": "your_outlook_client_id_here",
+  "client_secret": "your_outlook_client_secret_here",
+  "redirect_uri": "http://localhost:5000/oauth/outlook/callback",
+  "tenant_id": "common",
+  "scopes": [
+    "https://graph.microsoft.com/Mail.ReadWrite",
+    "https://graph.microsoft.com/Mail.Send",
+    "https://graph.microsoft.com/User.Read"
+  ]
+}
