@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SetupX Linux Server</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <h1>SetupX Linux Server</h1>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#install">Install</a></li>
+                    <li><a href="#docs">Documentation</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="container">
+                <h2>Automated Linux Server Setup</h2>
+                <p>Streamline your Linux server configuration with our comprehensive setup tool. Install development environments, security tools, and more with a single command.</p>
+                <div class="install-command">
+                    <code>choco install setupx-linux-server</code>
+                    <button onclick="copyToClipboard()">Copy</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="container">
+                <h2>Features</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>🚀 Quick Setup</h3>
+                        <p>Get your development environment up and running in minutes</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔧 Development Tools</h3>
+                        <p>Pre-configured development environments for web, AI, and cloud development</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🛡️ Security</h3>
+                        <p>Built-in security configurations and best practices</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📦 Package Management</h3>
+                        <p>Support for multiple package managers and dependency management</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="install" class="install">
+            <div class="container">
+                <h2>Installation</h2>
+                <div class="install-options">
+                    <div class="install-option">
+                        <h3>Chocolatey (Windows)</h3>
+                        <div class="code-block">
+                            <code>choco install setupx-linux-server</code>
+                            <button onclick="copyToClipboard('choco install setupx-linux-server')">Copy</button>
+                        </div>
+                    </div>
+                    <div class="install-option">
+                        <h3>Manual Installation</h3>
+                        <div class="code-block">
+                            <code>git clone https://github.com/your-repo/setupx-linux-server.git</code>
+                            <button onclick="copyToClipboard('git clone https://github.com/your-repo/setupx-linux-server.git')">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="docs" class="documentation">
+            <div class="container">
+                <h2>Documentation</h2>
+                <p>Learn more about SetupX Linux Server and how to customize your installation.</p>
+                <a href="docs/README.md" class="btn">View Documentation</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 SetupX Linux Server. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

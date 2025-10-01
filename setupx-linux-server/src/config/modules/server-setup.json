@@ -1,0 +1,187 @@
+{
+  "name": "server-setup",
+  "displayName": "Server Setup",
+  "description": "Complete server setup with web servers, databases, and development tools",
+  "version": "1.0.0",
+  "components": {
+    "nginx": {
+      "name": "nginx",
+      "displayName": "Nginx Web Server",
+      "description": "High-performance web server and reverse proxy",
+      "category": "web-server",
+      "commands": {
+        "install": "apt update && apt install -y nginx",
+        "remove": "apt remove -y nginx nginx-common",
+        "check": "nginx -v",
+        "test": "systemctl is-active nginx",
+        "start": "systemctl start nginx",
+        "stop": "systemctl stop nginx",
+        "restart": "systemctl restart nginx",
+        "enable": "systemctl enable nginx"
+      },
+      "dependencies": [],
+      "postInstall": "systemctl enable nginx && systemctl start nginx"
+    },
+    "apache": {
+      "name": "apache",
+      "displayName": "Apache HTTP Server",
+      "description": "Popular open-source web server",
+      "category": "web-server",
+      "commands": {
+        "install": "apt update && apt install -y apache2",
+        "remove": "apt remove -y apache2 apache2-utils",
+        "check": "apache2 -v",
+        "test": "systemctl is-active apache2",
+        "start": "systemctl start apache2",
+        "stop": "systemctl stop apache2",
+        "restart": "systemctl restart apache2",
+        "enable": "systemctl enable apache2"
+      },
+      "dependencies": [],
+      "postInstall": "systemctl enable apache2 && systemctl start apache2"
+    },
+    "postgresql": {
+      "name": "postgresql",
+      "displayName": "PostgreSQL Database",
+      "description": "Advanced open-source relational database",
+      "category": "database",
+      "commands": {
+        "install": "apt update && apt install -y postgresql postgresql-contrib",
+        "remove": "apt remove -y postgresql postgresql-contrib",
+        "check": "psql --version",
+        "test": "systemctl is-active postgresql",
+        "start": "systemctl start postgresql",
+        "stop": "systemctl stop postgresql",
+        "restart": "systemctl restart postgresql",
+        "enable": "systemctl enable postgresql"
+      },
+      "dependencies": [],
+      "postInstall": "systemctl enable postgresql && systemctl start postgresql"
+    },
+    "mysql": {
+      "name": "mysql",
+      "displayName": "MySQL Database",
+      "description": "Popular open-source relational database",
+      "category": "database",
+      "commands": {
+        "install": "apt update && apt install -y mysql-server mysql-client",
+        "remove": "apt remove -y mysql-server mysql-client",
+        "check": "mysql --version",
+        "test": "systemctl is-active mysql",
+        "start": "systemctl start mysql",
+        "stop": "systemctl stop mysql",
+        "restart": "systemctl restart mysql",
+        "enable": "systemctl enable mysql"
+      },
+      "dependencies": [],
+      "postInstall": "systemctl enable mysql && systemctl start mysql"
+    },
+    "mariadb": {
+      "name": "mariadb",
+      "displayName": "MariaDB Database",
+      "description": "MySQL-compatible database server",
+      "category": "database",
+      "commands": {
+        "install": "apt update && apt install -y mariadb-server mariadb-client",
+        "remove": "apt remove -y mariadb-server mariadb-client",
+        "check": "mariadb --version",
+        "test": "systemctl is-active mariadb",
+        "start": "systemctl start mariadb",
+        "stop": "systemctl stop mariadb",
+        "restart": "systemctl restart mariadb",
+        "enable": "systemctl enable mariadb"
+      },
+      "dependencies": [],
+      "postInstall": "systemctl enable mariadb && systemctl start mariadb"
+    },
+    "mongodb": {
+      "name": "mongodb",
+      "displayName": "MongoDB Database",
+      "description": "NoSQL document database",
+      "category": "database",
+      "commands": {
+        "install": "wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add - && echo 'deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse' | tee /etc/apt/sources.list.d/mongodb-org-6.0.list && apt update && apt install -y mongodb-org",
+        "remove": "apt remove -y mongodb-org mongodb-org-mongos mongodb-org-server mongodb-org-shell mongodb-org-tools",
+        "check": "mongod --version",
+        "test": "systemctl is-active mongod",
+        "start": "systemctl start mongod",
+        "stop": "systemctl stop mongod",
+        "restart": "systemctl restart mongod",
+        "enable": "systemctl enable mongod"
+      },
+      "dependencies": ["wget"],
+      "postInstall": "systemctl enable mongod && systemctl start mongod"
+    },
+    "nodejs": {
+      "name": "nodejs",
+      "displayName": "Node.js Runtime",
+      "description": "JavaScript runtime for server-side development",
+      "category": "development",
+      "commands": {
+        "install": "curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && apt install -y nodejs",
+        "remove": "apt remove -y nodejs",
+        "check": "node --version",
+        "test": "node --version && npm --version"
+      },
+      "dependencies": ["curl"],
+      "postInstall": "npm install -g npm@latest"
+    },
+    "docker": {
+      "name": "docker",
+      "displayName": "Docker Container Platform",
+      "description": "Container platform for application deployment",
+      "category": "development",
+      "commands": {
+        "install": "curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh && usermod -aG docker $USER",
+        "remove": "apt remove -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin",
+        "check": "docker --version",
+        "test": "docker run hello-world"
+      },
+      "dependencies": ["curl"],
+      "postInstall": "systemctl enable docker && systemctl start docker"
+    },
+    "git": {
+      "name": "git",
+      "displayName": "Git Version Control",
+      "description": "Distributed version control system",
+      "category": "development",
+      "commands": {
+        "install": "apt update && apt install -y git",
+        "remove": "apt remove -y git",
+        "check": "git --version",
+        "test": "git --version"
+      },
+      "dependencies": [],
+      "postInstall": "git config --global init.defaultBranch main"
+    },
+    "gh": {
+      "name": "gh",
+      "displayName": "GitHub CLI",
+      "description": "Command-line interface for GitHub",
+      "category": "development",
+      "commands": {
+        "install": "curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && echo 'deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main' | tee /etc/apt/sources.list.d/github-cli.list > /dev/null && apt update && apt install -y gh",
+        "remove": "apt remove -y gh",
+        "check": "gh --version",
+        "test": "gh --version"
+      },
+      "dependencies": ["curl"],
+      "postInstall": "gh auth login"
+    },
+    "pm2": {
+      "name": "pm2",
+      "displayName": "PM2 Process Manager",
+      "description": "Production process manager for Node.js applications",
+      "category": "development",
+      "commands": {
+        "install": "npm install -g pm2",
+        "remove": "npm uninstall -g pm2",
+        "check": "pm2 --version",
+        "test": "pm2 --version"
+      },
+      "dependencies": ["nodejs"],
+      "postInstall": "pm2 startup && pm2 save"
+    }
+  }
+}
+

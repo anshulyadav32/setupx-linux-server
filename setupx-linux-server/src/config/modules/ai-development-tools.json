@@ -1,0 +1,180 @@
+{
+  "name": "ai-development-tools",
+  "displayName": "AI Development Tools",
+  "description": "AI/Cloud developer tools: runtimes, databases, local stacks, and cloud CLIs",
+  "category": "development",
+  "priority": 4,
+  "status": "fully-working",
+  "components": {
+    "python": {
+      "name": "python",
+      "displayName": "Python",
+      "description": "Python runtime and pip",
+      "installMethod": "chocolatey",
+      "website": "https://python.org",
+      "status": "working",
+      "category": "ai-development-tools",
+      "commands": {
+        "install": "if (-not (Get-Command Test-Administrator -ErrorAction SilentlyContinue) -or -not (Test-Administrator)) { if (Test-Path \"$env:USERPROFILE\\scoop\\apps\\scoop\\current\\bin\\scoop.ps1\") { & \"$env:USERPROFILE\\scoop\\apps\\scoop\\current\\bin\\scoop.ps1\" install python } elseif (Test-Path \"$env:USERPROFILE\\scoop\\shims\\scoop.ps1\") { & \"$env:USERPROFILE\\scoop\\shims\\scoop.ps1\" install python } elseif (Get-Command winget -ErrorAction SilentlyContinue) { winget install -e --id Python.Python.3 --accept-package-agreements --accept-source-agreements } elseif (Get-Command choco -ErrorAction SilentlyContinue) { choco install python -y } else { Write-Host 'No installer found (scoop/winget/choco) for Python' -ForegroundColor Yellow; $global:LASTEXITCODE = 1 } } else { if (Get-Command choco -ErrorAction SilentlyContinue) { choco install python -y } elseif (Get-Command winget -ErrorAction SilentlyContinue) { winget install -e --id Python.Python.3 --accept-package-agreements --accept-source-agreements } elseif (Test-Path \"$env:USERPROFILE\\scoop\\apps\\scoop\\current\\bin\\scoop.ps1\") { & \"$env:USERPROFILE\\scoop\\apps\\scoop\\current\\bin\\scoop.ps1\" install python } else { Write-Host 'No installer found (choco/winget/scoop) for Python' -ForegroundColor Yellow; $global:LASTEXITCODE = 1 } }",
+        "remove": "choco uninstall python -y",
+        "update": "choco upgrade python -y",
+        "check": "python --version",
+        "verify": "python -m pip --version",
+        "test": "python -c \"print('Python OK')\"",
+        "path": "$env:Path = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User')"
+      }
+    },
+    "node": {
+      "name": "node",
+      "displayName": "Node.js",
+      "description": "Node.js runtime (uses existing Node.js component if present)",
+      "installMethod": "chocolatey",
+      "website": "https://nodejs.org",
+      "status": "available",
+      "category": "ai-development-tools",
+      "commands": {
+        "install": "if (Get-Command nvm -ErrorAction SilentlyContinue) { nvm install lts; nvm use lts } elseif (Get-Command choco -ErrorAction SilentlyContinue) { choco install nodejs-lts -y } else { Write-Host 'Install NVM or Chocolatey first for Node.js' -ForegroundColor Yellow; $global:LASTEXITCODE = 1 }",
+        "remove": "if (Get-Command choco -ErrorAction SilentlyContinue) { choco uninstall nodejs-lts -y }",
+        "update": "if (Get-Command nvm -ErrorAction SilentlyContinue) { nvm install lts; nvm use lts } elseif (Get-Command choco -ErrorAction SilentlyContinue) { choco upgrade nodejs-lts -y }",
+        "check": "node --version",
+        "verify": "npm --version"
+      }
+    },
+    "redis": {
+      "name": "redis",
+      "displayName": "Redis",
+      "description": "In-memory data store",
+      "installMethod": "chocolatey",
+      "website": "https://redis.io",
+      "status": "available",
+      "category": "ai-development-tools",
+      "commands": {
+        "install": "if (-not (Get-Command Test-Administrator -ErrorAction SilentlyContinue) -or -not (Test-Administrator)) { if (Get-Command scoop -ErrorAction SilentlyContinue) { scoop install redis } elseif (Get-Command winget -ErrorAction SilentlyContinue) { winget install -e --id Memurai.MemuraiDeveloper --accept-package-agreements --accept-source-agreements } elseif (Get-Command choco -ErrorAction SilentlyContinue) { choco install redis-64 -y } else { Write-Host 'No installer found for Redis' -ForegroundColor Yellow; $global:LASTEXITCODE = 1 } } else { if (Get-Command choco -ErrorAction SilentlyContinue) { choco install redis-64 -y } elseif (Get-Command winget -ErrorAction SilentlyContinue) { winget install -e --id Memurai.MemuraiDeveloper --accept-package-agreements --accept-source-agreements } elseif (Get-Command scoop -ErrorAction SilentlyContinue) { scoop install redis } else { Write-Host 'No installer found for Redis' -ForegroundColor Yellow; $global:LASTEXITCODE = 1 } }",
+        "remove": "choco uninstall redis-64 -y",
+        "update": "choco upgrade redis-64 -y",
+        "check": "Test-Path 'C:\\Program Files\\Redis'",
+        "verify": "redis-server --version"
+      }
+    },
+    "xampp": {
+      "name": "xampp",
+      "displayName": "XAMPP",
+      "description": "Apache, MariaDB, PHP, and Perl",
+      "installMethod": "chocolatey",
+      "website": "https://www.apachefriends.org/",
+      "status": "available",
+      "category": "ai-development-tools",
+      "commands": {
+        "install": "if (-not (Get-Command Test-Administrator -ErrorAction SilentlyContinue) -or -not (Test-Administrator)) { if (Get-Command winget -ErrorAction SilentlyContinue) { winget install -e --id ApacheFriends.Xampp --accept-package-agreements --accept-source-agreements } elseif (Get-Command choco -ErrorAction SilentlyContinue) { choco install xampp -y } else { Write-Host 'No installer found for XAMPP' -ForegroundColor Yellow; $global:LASTEXITCODE = 1 } } else { if (Get-Command choco -ErrorAction SilentlyContinue) { choco install xampp -y } elseif (Get-Command winget -ErrorAction SilentlyContinue) { winget install -e --id ApacheFriends.Xampp --accept-package-agreements --accept-source-agreements } else { Write-Host 'No installer found for XAMPP' -ForegroundColor Yellow; $global:LASTEXITCODE = 1 } }",
+        "remove": "choco uninstall xampp -y",
+        "update": "choco upgrade xampp -y",
+        "check": "Test-Path 'C:\\xampp'"
+      }
+    },
+    "vercel-cli": {
+      "name": "vercel-cli",
+      "displayName": "Vercel CLI",
+      "description": "Vercel command-line interface",
+      "installMethod": "npm",
+      "website": "https://vercel.com/docs/cli",
+      "status": "available",
+      "category": "ai-development-tools",
+      "commands": {
+        "install": "if (Get-Command npm -ErrorAction SilentlyContinue) { npm install -g vercel } elseif (Get-Command scoop -ErrorAction SilentlyContinue) { if (-not (scoop bucket list | Select-String -Quiet 'main')) { scoop bucket add main } ; scoop install vercel } else { Write-Host 'npm/scoop not available for Vercel CLI' -ForegroundColor Yellow; $global:LASTEXITCODE = 1 }",
+        "remove": "npm uninstall -g vercel",
+        "update": "npm update -g vercel",
+        "check": "vercel --version"
+      }
+    },
+    "netlify-cli": {
+      "name": "netlify-cli",
+      "displayName": "Netlify CLI",
+      "description": "Netlify command-line interface",
+      "installMethod": "npm",
+      "website": "https://docs.netlify.com/cli/get-started/",
+      "status": "available",
+      "category": "ai-development-tools",
+      "commands": {
+        "install": "npm install -g netlify-cli",
+        "remove": "npm uninstall -g netlify-cli",
+        "update": "npm update -g netlify-cli",
+        "check": "netlify --version"
+      }
+    },
+    "aws-cli": {
+      "name": "aws-cli",
+      "displayName": "AWS CLI",
+      "description": "Amazon Web Services CLI",
+      "installMethod": "chocolatey",
+      "website": "https://aws.amazon.com/cli/",
+      "status": "available",
+      "category": "ai-development-tools",
+      "commands": {
+        "install": "if (-not (Get-Command Test-Administrator -ErrorAction SilentlyContinue) -or -not (Test-Administrator)) { if (Get-Command scoop -ErrorAction SilentlyContinue) { scoop bucket add main | Out-Null; scoop install aws } elseif (Get-Command py -ErrorAction SilentlyContinue) { py -m pip install --user pipx; py -m pipx ensurepath; $env:PATH = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User'); py -m pipx install awscli } elseif (Get-Command python -ErrorAction SilentlyContinue) { python -m pip install --user pipx; python -m pipx ensurepath; $env:PATH = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User'); python -m pipx install awscli } elseif (Get-Command winget -ErrorAction SilentlyContinue) { winget install -e --id Amazon.AWSCLI --accept-package-agreements --accept-source-agreements } elseif (Get-Command choco -ErrorAction SilentlyContinue) { choco install awscli -y } else { Write-Host 'No installer found for AWS CLI' -ForegroundColor Yellow; $global:LASTEXITCODE = 1 } } else { if (Get-Command choco -ErrorAction SilentlyContinue) { choco install awscli -y } elseif (Get-Command winget -ErrorAction SilentlyContinue) { winget install -e --id Amazon.AWSCLI --accept-package-agreements --accept-source-agreements } elseif (Get-Command scoop -ErrorAction SilentlyContinue) { scoop bucket add main | Out-Null; scoop install aws } else { Write-Host 'No installer found for AWS CLI' -ForegroundColor Yellow; $global:LASTEXITCODE = 1 } }",
+        "remove": "choco uninstall awscli -y",
+        "update": "choco upgrade awscli -y",
+        "check": "aws --version"
+      }
+    },
+    "azure-cli": {
+      "name": "azure-cli",
+      "displayName": "Azure CLI",
+      "description": "Microsoft Azure CLI",
+      "installMethod": "chocolatey",
+      "website": "https://learn.microsoft.com/cli/azure/",
+      "status": "available",
+      "category": "ai-development-tools",
+      "commands": {
+        "install": "if (-not (Get-Command Test-Administrator -ErrorAction SilentlyContinue) -or -not (Test-Administrator)) { if (Get-Command scoop -ErrorAction SilentlyContinue) { scoop install azure-cli } elseif (Get-Command winget -ErrorAction SilentlyContinue) { winget install -e --id Microsoft.AzureCLI --accept-package-agreements --accept-source-agreements } elseif (Get-Command choco -ErrorAction SilentlyContinue) { choco install azure-cli -y } else { Write-Host 'No installer found for Azure CLI' -ForegroundColor Yellow; $global:LASTEXITCODE = 1 } } else { if (Get-Command choco -ErrorAction SilentlyContinue) { choco install azure-cli -y } elseif (Get-Command winget -ErrorAction SilentlyContinue) { winget install -e --id Microsoft.AzureCLI --accept-package-agreements --accept-source-agreements } elseif (Get-Command scoop -ErrorAction SilentlyContinue) { scoop install azure-cli } else { Write-Host 'No installer found for Azure CLI' -ForegroundColor Yellow; $global:LASTEXITCODE = 1 } }",
+        "remove": "choco uninstall azure-cli -y",
+        "update": "choco upgrade azure-cli -y",
+        "check": "az --version"
+      }
+    },
+    "gcloud-cli": {
+      "name": "gcloud-cli",
+      "displayName": "Google Cloud SDK",
+      "description": "Google Cloud CLI (gcloud)",
+      "installMethod": "chocolatey",
+      "website": "https://cloud.google.com/sdk",
+      "status": "available",
+      "category": "ai-development-tools",
+      "commands": {
+        "install": "if (-not (Get-Command Test-Administrator -ErrorAction SilentlyContinue) -or -not (Test-Administrator)) { if (Get-Command scoop -ErrorAction SilentlyContinue) { scoop install googlecloudsdk } elseif (Get-Command winget -ErrorAction SilentlyContinue) { winget install -e --id Google.CloudSDK --accept-package-agreements --accept-source-agreements } elseif (Get-Command choco -ErrorAction SilentlyContinue) { choco install gcloudsdk -y } else { Write-Host 'No installer found for Google Cloud SDK' -ForegroundColor Yellow; $global:LASTEXITCODE = 1 } } else { if (Get-Command choco -ErrorAction SilentlyContinue) { choco install gcloudsdk -y } elseif (Get-Command winget -ErrorAction SilentlyContinue) { winget install -e --id Google.CloudSDK --accept-package-agreements --accept-source-agreements } elseif (Get-Command scoop -ErrorAction SilentlyContinue) { scoop install googlecloudsdk } else { Write-Host 'No installer found for Google Cloud SDK' -ForegroundColor Yellow; $global:LASTEXITCODE = 1 } }",
+        "remove": "choco uninstall gcloudsdk -y",
+        "update": "choco upgrade gcloudsdk -y",
+        "check": "gcloud --version"
+      }
+    },
+    "codex-cli": {
+      "name": "codex-cli",
+      "displayName": "Codex CLI",
+      "description": "AI code assistant CLI (placeholder)",
+      "installMethod": "noop",
+      "website": "https://www.npmjs.com/",
+      "status": "skipped",
+      "category": "ai-development-tools",
+      "commands": {
+        "install": "Write-Host 'codex-cli placeholder skipped' -ForegroundColor Yellow; $global:LASTEXITCODE = 0",
+        "remove": "Write-Host 'codex-cli not installed' -ForegroundColor Yellow",
+        "update": "Write-Host 'codex-cli not installed' -ForegroundColor Yellow",
+        "check": "Write-Host 'codex-cli not installed' -ForegroundColor Yellow; $global:LASTEXITCODE = 0"
+      }
+    },
+    "grok-cli": {
+      "name": "grok-cli",
+      "displayName": "Grok CLI",
+      "description": "Grok AI CLI (placeholder)",
+      "installMethod": "npm",
+      "website": "https://www.npmjs.com/",
+      "status": "available",
+      "category": "ai-development-tools",
+      "commands": {
+        "install": "npm install -g grok-cli",
+        "remove": "npm uninstall -g grok-cli",
+        "update": "npm update -g grok-cli",
+        "check": "grok --version"
+      }
+    }
+  }
+}

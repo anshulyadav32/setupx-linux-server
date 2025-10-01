@@ -1,0 +1,140 @@
+#!/usr/bin/env bash
+# SetupX - Modular Linux Development Setup Tool
+# Main CLI interface
+
+set -euo pipefail
+
+# Get the directory of this script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Import core modules
+source "$SCRIPT_DIR/src/utils/logger.sh"
+source "$SCRIPT_DIR/src/utils/helpers.sh"
+source "$SCRIPT_DIR/src/core/engine.sh"
+source "$SCRIPT_DIR/src/core/json-loader.sh"
+
+# --- Help function ---
+show_help() {
+    echo "SetupX - Modular Linux Development Setup Tool"
+    echo "============================================="
+    echo ""
+    echo "Usage: setupx <command> [options]"
+    echo ""
+    echo "Commands:"
+    echo "    install <component>          # Install a specific component"
+    echo "    remove <component>           # Remove a specific component"
+    echo "    update <component>           # Update a specific component"
+    echo "    check <component>            # Check if a component is installed"
+    echo "    verify <component>           # Verify component installation"
+    echo "    test <component>             # Run component's test command"
+    echo "    list                         # List all available modules"
+    echo "    list-all                     # List all available components"
+    echo "    list-module <module>         # List components in a specific module"
+    echo "    install-module <module>      # Install all components in a module"
+    echo "    status                       # Show status of common development tools"
+    echo "    search <keyword>             # Search for components by keyword"
+    echo "    help                         # Show this help message"
+    echo "    -sh <script-name> [args]     # Run a custom script from the 'scripts' directory"
+    echo ""
+    echo "Examples:"
+    echo "    setupx install curl            # Install cURL"
+    echo "    setupx install nodejs          # Install Node.js"
+    echo "    setupx check curl             # Check if cURL is installed"
+    echo "    setupx install-module web-development  # Install all web dev tools"
+    echo "    setupx list-module package-managers    # List package managers"
+    echo "    setupx search docker          # Search for Docker component"
+    echo "    setupx -sh final-ssh-root-login -p passwordroot  # Enable SSH root login"
+    echo "    setupx -sh install-postgres -d mydb -u dbuser -p dbpass123  # Install PostgreSQL"
+    echo "    setupx -sh deploy-node-app    # Deploy Node.js app"
+    echo ""
+    echo "Available Modules:"
+    get_all_module_configs | jq -r '.[] | "    \(.name) - \(.description)"' | sort
+    echo ""
+    echo "For more information: https://github.com/anshulyadav32/setupx-linux-server"
+}
+
+# --- Main logic ---
+if [ "$#" -eq 0 ]; then
+    show_help
+    exit 0
+fi
+
+# Handle -sh flag for running scripts
+if [ "$1" == "-sh" ]; then
+    shift # Remove -sh
+    if [ "$#" -eq 0 ]; then
+        log_error "Script name missing after -sh"
+        show_help
+        exit 1
+    fi
+    script_name="$1"
+    shift # Remove script name
+    script_path="$SCRIPT_DIR/scripts/$script_name.sh"
+    if [ -f "$script_path" ]; then
+        log_info "Running script: $script_name"
+        bash "$script_path" "$@"
+    else
+        log_error "Script '$script_name' not found in '$SCRIPT_DIR/scripts/'"
+        exit 1
+    fi
+    exit 0
+fi
+
+command="$1"
+shift # Remove command
+
+case "$command" in
+    install)
+        if [ -z "${1:-}" ]; then log_error "Component name missing for install command"; show_help; exit 1; fi
+        install_component "$1"
+        ;;
+    remove)
+        if [ -z "${1:-}" ]; then log_error "Component name missing for remove command"; show_help; exit 1; fi
+        remove_component "$1"
+        ;;
+    update)
+        if [ -z "${1:-}" ]; then log_error "Component name missing for update command"; show_help; exit 1; fi
+        update_component "$1"
+        ;;
+    check)
+        if [ -z "${1:-}" ]; then log_error "Component name missing for check command"; show_help; exit 1; fi
+        check_component "$1"
+        ;;
+    verify)
+        if [ -z "${1:-}" ]; then log_error "Component name missing for verify command"; show_help; exit 1; fi
+        verify_component "$1"
+        ;;
+    test)
+        if [ -z "${1:-}" ]; then log_error "Component name missing for test command"; show_help; exit 1; fi
+        test_component "$1"
+        ;;
+    list)
+        list_modules
+        ;;
+    list-all)
+        list_all_components
+        ;;
+    list-module)
+        if [ -z "${1:-}" ]; then log_error "Module name missing for list-module command"; show_help; exit 1; fi
+        list_components_in_module "$1"
+        ;;
+    install-module)
+        if [ -z "${1:-}" ]; then log_error "Module name missing for install-module command"; show_help; exit 1; fi
+        install_module "$1"
+        ;;
+    status)
+        check_common_tools_status
+        ;;
+    search)
+        if [ -z "${1:-}" ]; then log_error "Search keyword missing"; show_help; exit 1; fi
+        search_components "$1"
+        ;;
+    help)
+        show_help
+        ;;
+    *)
+        log_error "Unknown command: $command"
+        show_help
+        exit 1
+        ;;
+esac

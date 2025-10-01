@@ -1,0 +1,33 @@
+{
+  "name": "setupx-linux-server",
+  "version": "2.0.0",
+  "description": "Modular Linux Development Environment Setup Tool - JSON-Driven Architecture",
+  "author": "anshulyadav32",
+  "homepage": "https://setupx-linux-server.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anshulyadav32/setupx-linux-server.git"
+  },
+  "keywords": [
+    "linux",
+    "server",
+    "setup",
+    "automation",
+    "development",
+    "devops",
+    "deployment"
+  ],
+  "scripts": {
+    "build": "echo 'Static site - no build required'",
+    "start": "echo 'Static site - no start required'",
+    "dev": "python -m http.server 8000",
+    "deploy": "vercel --prod"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "vercel": "^32.0.0"
+  }
+}

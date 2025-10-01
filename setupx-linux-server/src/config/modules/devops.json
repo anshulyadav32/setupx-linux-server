@@ -1,0 +1,61 @@
+{
+  "name": "devops",
+  "displayName": "DevOps Tools",
+  "description": "DevOps and automation tools for CI/CD and infrastructure management",
+  "category": "development",
+  "priority": 8,
+  "status": "fully-working",
+  "components": {
+    "terraform": {
+      "name": "terraform",
+      "displayName": "Terraform",
+      "description": "Infrastructure as code tool",
+      "installMethod": "chocolatey",
+      "website": "https://terraform.io",
+      "status": "working",
+      "category": "devops",
+      "commands": {
+        "install": "choco install terraform -y",
+        "remove": "choco uninstall terraform -y",
+        "update": "choco upgrade terraform -y",
+        "check": "terraform --version",
+        "verify": "terraform --help",
+        "test": "terraform version"
+      }
+    },
+    "ansible": {
+      "name": "ansible",
+      "displayName": "Ansible",
+      "description": "Automation platform",
+      "installMethod": "pip",
+      "website": "https://ansible.com",
+      "status": "working",
+      "category": "devops",
+      "commands": {
+        "install": "pip install ansible",
+        "remove": "pip uninstall ansible -y",
+        "update": "pip install --upgrade ansible",
+        "check": "ansible --version",
+        "verify": "ansible --help",
+        "test": "ansible localhost -m ping"
+      }
+    },
+    "jenkins": {
+      "name": "jenkins",
+      "displayName": "Jenkins",
+      "description": "Open source automation server",
+      "installMethod": "chocolatey",
+      "website": "https://jenkins.io",
+      "status": "working",
+      "category": "devops",
+      "commands": {
+        "install": "choco install jenkins -y",
+        "remove": "choco uninstall jenkins -y",
+        "update": "choco upgrade jenkins -y",
+        "check": "Get-Service jenkins -ErrorAction SilentlyContinue",
+        "verify": "Write-Host 'Jenkins service check'"
+      }
+    }
+  }
+}
+
