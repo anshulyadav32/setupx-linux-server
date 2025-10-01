@@ -1,28 +1,55 @@
 # SetupX Linux Server
 
-🚀 **Automated Linux Server Setup Tool** - Streamline your Linux server configuration with our comprehensive setup tool.
+🚀 **Modular Linux Development Environment Setup Tool** - Complete Linux server configuration with advanced scripts for database management, web deployment, and security.
 
 ## 🌟 Features
 
 - **Quick Setup**: Get your development environment up and running in minutes
-- **Development Tools**: Pre-configured development environments for web, AI, and cloud development
-- **Security**: Built-in security configurations and best practices
-- **Package Management**: Support for multiple package managers and dependency management
+- **Database Management**: PostgreSQL, MySQL, MongoDB password reset and user creation
+- **Web Deployment**: Nginx domain setup with SSL, PM2 process management
+- **Security**: SSH configuration, UFW firewall, Fail2Ban intrusion prevention
+- **Development Tools**: Complete web development stack with Node.js, Docker, and more
+- **Advanced Scripts**: SetCP, Nginx domain setup, PM2 deployment automation
 
-## 🚀 Quick Install
+## 🚀 One-Line Install
 
-### Linux/macOS
 ```bash
-curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/main/setupx.sh | bash
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash
 ```
 
-### Manual Installation
+## 📋 Quick Start
+
 ```bash
-git clone https://github.com/anshulyadav32/setupx-linux-server.git
-cd setupx-linux-server
-chmod +x setupx.sh
-./setupx.sh
+# Show help
+setupx help
+
+# List all modules
+setupx list
+
+# Install package managers
+setupx install-module package-managers
+
+# Install web development stack
+setupx install-module web-development
+
+# Reset database password
+setupx -sh setcp -p postgresql newpass123
+
+# Setup Nginx domain with SSL
+setupx -sh nginx-domain -d example.com -p 3000 -s
+
+# Deploy application with PM2
+setupx -sh pm2-deploy -n myapp -p 3000 -d /var/www/myapp
 ```
+
+## 🔧 Available Scripts
+
+- **SetCP**: Database password management (PostgreSQL, MySQL, MongoDB)
+- **Nginx Domain**: Domain setup with SSL automation
+- **PM2 Deploy**: Application deployment with process management
+- **GCP Root Login**: Enable root access for GCP VMs
+- **System Update**: Automated system updates
+- **Backup System**: System backup creation
 
 ## 📖 Documentation
 
