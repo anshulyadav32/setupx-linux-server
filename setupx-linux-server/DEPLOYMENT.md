@@ -1,136 +1,93 @@
-# 🚀 Deployment Guide
+# SetupX Deployment Guide
 
-This project supports multiple deployment platforms for maximum flexibility and performance.
+## 🚀 Deployment Options
 
-## 🌐 Deployment Options
-
-### 1. GitHub Pages
-- **URL**: `https://anshulyadav32.github.io/setupx-linux-server/`
+### GitHub Pages
 - **Branch**: `github-pages`
-- **Auto-deploy**: ✅ Enabled via GitHub Actions
-- **Features**: Free, integrated with GitHub
-
-### 2. Vercel
-- **URL**: `https://setupx-linux-server.vercel.app`
-- **Auto-deploy**: ✅ Enabled via GitHub Actions
-- **Features**: Global CDN, serverless functions, preview deployments
-
-### 3. Manual Deployment
-- **Local**: `python -m http.server 8000`
-- **Any static host**: Upload files to any web server
-
-## 🔧 Setup Instructions
-
-### GitHub Pages Setup
-1. Go to repository **Settings** → **Pages**
-2. Select **Source**: GitHub Actions
-3. Push to `github-pages` branch to trigger deployment
-
-### Vercel Setup
-1. Install Vercel CLI: `npm i -g vercel`
-2. Login: `vercel login`
-3. Deploy: `vercel --prod`
-4. Or connect GitHub repository in Vercel dashboard
-
-### Environment Variables
-For Vercel deployment, add these secrets in GitHub:
-- `VERCEL_TOKEN`: Your Vercel API token
-- `VERCEL_ORG_ID`: Your Vercel organization ID
-- `VERCEL_PROJECT_ID`: Your Vercel project ID
-
-## 📁 File Structure
-```
-├── index.html          # Main website
-├── styles.css          # Styling
-├── script.js           # JavaScript
-├── package.json        # Node.js configuration
-├── vercel.json         # Vercel configuration
-├── .github/workflows/  # GitHub Actions
-│   ├── github-pages.yml
-│   └── vercel-deploy.yml
-└── README.md           # Documentation
-```
-
-## 🚀 Quick Deploy Commands
-
-### GitHub Pages
-```bash
-git push origin github-pages
-```
+- **URL**: https://anshulyadav32.github.io/setupx-linux-server/
+- **Configuration**: Website files in `./website/` directory
+- **Setup**: Go to repository settings → Pages → Source: `github-pages` branch, folder: `/website`
 
 ### Vercel
-```bash
-vercel --prod
+- **Branch**: `vercel-website`
+- **URL**: https://setupx-linux-server.vercel.app
+- **Configuration**: Website files in root directory
+- **Setup**: 
+  1. Go to https://vercel.com/dashboard
+  2. Import repository: `anshulyadav32/setupx-linux-server`
+  3. Select branch: `vercel-website`
+  4. Framework: "Other" (Static)
+  5. Deploy!
+
+## 📁 Branch Structure
+
+### github-pages branch
+```
+├── website/
+│   └── index.html          ← GitHub Pages website
+├── setupx                  ← Core CLI
+├── scripts/                ← Utility scripts
+└── src/                    ← Core system
 ```
 
-### Local Development
-```bash
-python -m http.server 8000
-# or
-npx serve .
+### vercel-website branch
+```
+├── index.html              ← Vercel website (root)
+├── vercel.json             ← Vercel configuration
+├── package.json            ← Project metadata
+├── .vercelignore           ← Vercel ignore file
+├── setupx                  ← Core CLI
+├── scripts/                ← Utility scripts
+└── src/                    ← Core system
 ```
 
-## 🔄 Automatic Deployments
+## 🔧 Configuration Files
 
-Both platforms will automatically deploy when you:
-- Push to `main` branch (Vercel)
-- Push to `github-pages` branch (GitHub Pages)
-- Create pull requests (Vercel preview)
+### vercel.json
+```json
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/index.html"
+    }
+  ]
+}
+```
 
-## 📊 Performance Features
+### .vercelignore
+```
+# Ignore development files
+setupx
+setupx.sh
+slx
+scripts/
+src/
+test/
+docs/
+config.json
 
-### Vercel Optimizations
-- Global CDN distribution
-- Automatic HTTPS
-- Edge functions support
-- Preview deployments for PRs
-- Analytics and monitoring
+# Keep only website files
+!index.html
+!package.json
+!vercel.json
+```
 
-### GitHub Pages Features
-- Free hosting
-- Custom domain support
-- Jekyll integration (if needed)
-- GitHub integration
+## 🌐 Live URLs
+- **GitHub Pages**: https://anshulyadav32.github.io/setupx-linux-server/
+- **Vercel**: https://setupx-linux-server.vercel.app
 
-## 🛠️ Customization
-
-### Vercel Configuration
-Edit `vercel.json` for:
-- Custom headers
-- Redirects
-- Environment variables
-- Build settings
-
-### GitHub Pages Configuration
-Edit `.github/workflows/github-pages.yml` for:
-- Build steps
-- Deployment settings
-- Environment variables
-
-## 🔍 Monitoring
-
-### Vercel
-- Dashboard: https://vercel.com/dashboard
-- Analytics: Built-in performance monitoring
-- Logs: Real-time deployment logs
-
-### GitHub Pages
-- Actions: https://github.com/anshulyadav32/setupx-linux-server/actions
-- Pages: Repository Settings → Pages
-
-## 🆘 Troubleshooting
-
-### Common Issues
-1. **Build failures**: Check GitHub Actions logs
-2. **Vercel deployment**: Verify VERCEL_TOKEN secret
-3. **Custom domain**: Update DNS settings
-4. **Performance**: Check Vercel Analytics
-
-### Support
-- GitHub Issues: [Create an issue](https://github.com/anshulyadav32/setupx-linux-server/issues)
-- Vercel Support: [Vercel Help Center](https://vercel.com/help)
-- Documentation: [View docs](https://github.com/anshulyadav32/setupx-linux-server/tree/main/docs)
-
----
-
-**Made with ❤️ for the Linux community**
+## 📊 Features
+- ✅ Responsive design
+- ✅ Modern UI with gradient background
+- ✅ Quick install instructions
+- ✅ Feature showcase
+- ✅ Usage examples
+- ✅ Mobile-friendly
