@@ -1,0 +1,101 @@
+{
+  "name": "SetupX",
+  "version": "2.0.0",
+  "description": "Modular Linux Development Environment Setup Tool - JSON-Driven Architecture",
+  "author": "anshulyadav32",
+  "repository": "https://github.com/anshulyadav32/setupx-linux-server",
+  "installPath": "/usr/local/bin/setupx",
+  "logLevel": "INFO",
+  "autoUpdate": true,
+  
+  "cli": {
+    "name": "setupx",
+    "aliases": ["slx"],
+    "banner": {
+      "enabled": true,
+      "title": "SetupX",
+      "subtitle": "Modular Linux Development Setup Tool",
+      "description": "JSON-Driven Architecture"
+    }
+  },
+  
+  "paths": {
+    "modules": "src/config/modules",
+    "core": "src/core",
+    "utils": "src/utils",
+    "scripts": "scripts",
+    "test": "test"
+  },
+  
+  "statusCheck": {
+    "commonTools": [
+      "apt",
+      "snap",
+      "flatpak",
+      "nvm",
+      "npm",
+      "pip",
+      "gh",
+      "jdk",
+      "nodejs",
+      "python",
+      "docker",
+      "curl",
+      "wget",
+      "vim",
+      "nano",
+      "chrome-remote-desktop",
+      "ssh",
+      "ufw",
+      "fail2ban",
+      "pm2",
+      "psql",
+      "mysql",
+      "nginx",
+      "certbot",
+      "system-update",
+      "backup-system",
+      "setcp",
+      "nginx-domain",
+      "pm2-deploy",
+      "final-ssh-root-login",
+      "install-postgres",
+      "deploy-node-app",
+      "update-all",
+      "reset-postgres",
+      "reset-mariadb",
+      "reset-mysql",
+      "reset-mongodb",
+      "deploy-node-git",
+      "ssl-setup",
+      "postgres-remote",
+      "nginx",
+      "apache",
+      "postgresql",
+      "mysql",
+      "mariadb",
+      "mongodb",
+      "nodejs",
+      "docker",
+      "git",
+      "gh",
+      "pm2"
+    ]
+  },
+  
+  "installation": {
+    "installPath": "/usr/local/bin/setupx",
+    "executablePath": "/usr/local/bin/setupx/setupx",
+    "pathVariable": "/usr/local/bin/setupx",
+    "quickInstall": {
+      "description": "One-command SetupX installation",
+      "command": "curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/main/install.sh | bash"
+    }
+  },
+  
+  "support": {
+    "issues": "https://github.com/anshulyadav32/setupx-linux-server/issues",
+    "documentation": "https://github.com/anshulyadav32/setupx-linux-server/wiki",
+    "discussions": "https://github.com/anshulyadav32/setupx-linux-server/discussions"
+  }
+}

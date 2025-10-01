@@ -1,0 +1,14 @@
+# Ignore development files
+setupx
+setupx.sh
+slx
+scripts/
+src/
+test/
+docs/
+config.json
+
+# Keep only website files
+!index.html
+!package.json
+!vercel.json

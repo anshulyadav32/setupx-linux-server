@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# SetupX Short Alias
+# Short alias for setupx command
+
+exec "$(dirname "$0")/setupx" "$@"

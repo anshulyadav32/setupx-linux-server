@@ -1,0 +1,130 @@
+{
+  "name": "package-managers",
+  "displayName": "Package Managers",
+  "description": "Essential Linux package managers: APT, Snap, and Flatpak",
+  "category": "foundation",
+  "priority": 1,
+  "status": "fully-working",
+  "components": {
+    "apt": {
+      "name": "apt",
+      "displayName": "APT",
+      "description": "Advanced Package Tool for Debian/Ubuntu systems",
+      "installMethod": "system",
+      "website": "https://wiki.debian.org/Apt",
+      "status": "working",
+      "category": "package-manager",
+      "commands": {
+        "install": "sudo apt update && sudo apt install -y apt",
+        "remove": "sudo apt remove -y apt",
+        "update": "sudo apt update && sudo apt upgrade -y",
+        "check": "command -v apt >/dev/null 2>&1",
+        "verify": "apt --version",
+        "test": "apt list --installed | head -5"
+      }
+    },
+    "snap": {
+      "name": "snap",
+      "displayName": "Snap",
+      "description": "Universal Linux package manager",
+      "installMethod": "system",
+      "website": "https://snapcraft.io",
+      "status": "working",
+      "category": "package-manager",
+      "commands": {
+        "install": "sudo apt update && sudo apt install -y snapd",
+        "remove": "sudo apt remove -y snapd",
+        "update": "sudo snap refresh",
+        "check": "command -v snap >/dev/null 2>&1",
+        "verify": "snap --version",
+        "test": "snap list"
+      }
+    },
+    "flatpak": {
+      "name": "flatpak",
+      "displayName": "Flatpak",
+      "description": "Application sandboxing and distribution framework",
+      "installMethod": "system",
+      "website": "https://flatpak.org",
+      "status": "working",
+      "category": "package-manager",
+      "commands": {
+        "install": "sudo apt update && sudo apt install -y flatpak",
+        "remove": "sudo apt remove -y flatpak",
+        "update": "flatpak update",
+        "check": "command -v flatpak >/dev/null 2>&1",
+        "verify": "flatpak --version",
+        "test": "flatpak list"
+      }
+    },
+    "nvm": {
+      "name": "nvm",
+      "displayName": "NVM (Node Version Manager)",
+      "description": "Node Version Manager for Linux to manage multiple Node.js versions",
+      "installMethod": "curl",
+      "website": "https://github.com/nvm-sh/nvm",
+      "status": "available",
+      "category": "package-manager",
+      "commands": {
+        "install": "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash",
+        "remove": "rm -rf ~/.nvm",
+        "update": "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash",
+        "check": "command -v nvm >/dev/null 2>&1",
+        "verify": "nvm --version",
+        "test": "nvm list"
+      }
+    },
+    "nodejs": {
+      "name": "nodejs",
+      "displayName": "Node.js",
+      "description": "JavaScript runtime (from NVM if available, otherwise via APT)",
+      "installMethod": "system",
+      "website": "https://nodejs.org",
+      "status": "available",
+      "category": "package-manager",
+      "commands": {
+        "install": "if command -v nvm >/dev/null 2>&1; then nvm install --lts && nvm use --lts; else sudo apt update && sudo apt install -y nodejs npm; fi",
+        "remove": "if command -v nvm >/dev/null 2>&1; then echo 'Use nvm to uninstall specific Node versions (e.g., nvm uninstall <version>)'; else sudo apt remove -y nodejs npm; fi",
+        "update": "if command -v nvm >/dev/null 2>&1; then nvm install --lts && nvm use --lts; else sudo apt update && sudo apt upgrade -y nodejs npm; fi",
+        "check": "command -v node >/dev/null 2>&1",
+        "verify": "node --version",
+        "test": "node --version"
+      }
+    },
+    "npm": {
+      "name": "npm",
+      "displayName": "NPM",
+      "description": "Node package manager (bundled with Node.js)",
+      "installMethod": "system",
+      "website": "https://www.npmjs.com/",
+      "status": "available",
+      "category": "package-manager",
+      "commands": {
+        "install": "if command -v npm >/dev/null 2>&1; then npm install -g npm@latest; else if command -v node >/dev/null 2>&1; then npm install -g npm@latest; else sudo apt update && sudo apt install -y nodejs npm; fi; fi",
+        "remove": "echo 'npm is part of Node.js. Remove Node.js to remove npm.'",
+        "update": "if command -v npm >/dev/null 2>&1; then npm install -g npm@latest; fi",
+        "check": "command -v npm >/dev/null 2>&1",
+        "verify": "npm --version",
+        "test": "npm --version"
+      }
+    },
+    "pip": {
+      "name": "pip",
+      "displayName": "PIP (Python)",
+      "description": "Python package manager (via Python ensurepip)",
+      "installMethod": "system",
+      "website": "https://pip.pypa.io/",
+      "status": "available",
+      "category": "package-manager",
+      "commands": {
+        "install": "if command -v python3 >/dev/null 2>&1; then python3 -m ensurepip --upgrade && python3 -m pip install --upgrade pip; else sudo apt update && sudo apt install -y python3 python3-pip; fi",
+        "remove": "echo 'pip is part of Python. Remove Python to remove pip.'",
+        "update": "if command -v python3 >/dev/null 2>&1; then python3 -m pip install --upgrade pip; fi",
+        "check": "command -v pip3 >/dev/null 2>&1",
+        "verify": "pip3 --version",
+        "test": "pip3 --version"
+      }
+    }
+  }
+}
+

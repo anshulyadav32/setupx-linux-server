@@ -1,0 +1,424 @@
+{
+  "name": "scripts",
+  "displayName": "Custom Scripts",
+  "description": "Custom deployment and automation scripts",
+  "version": "1.0.0",
+  "components": [
+    {
+      "name": "final-ssh-root-login",
+      "displayName": "SSH Root Login",
+      "description": "Enable SSH root login with password authentication",
+      "category": "system",
+      "commands": {
+        "install": "bash scripts/final-ssh-root-login.sh",
+        "check": "grep -q 'PermitRootLogin yes' /etc/ssh/sshd_config",
+        "test": "systemctl is-active ssh"
+      },
+      "parameters": {
+        "password": {
+          "type": "string",
+          "description": "Root password to set",
+          "default": "passwordroot",
+          "required": false
+        }
+      },
+      "usage": "setupx -sh final-ssh-root-login [-p <password>]"
+    },
+    {
+      "name": "install-postgres",
+      "displayName": "PostgreSQL Installer",
+      "description": "Install PostgreSQL with database and user creation",
+      "category": "database",
+      "commands": {
+        "install": "bash scripts/install-postgres.sh",
+        "check": "systemctl is-active postgresql",
+        "test": "psql --version"
+      },
+      "parameters": {
+        "database": {
+          "type": "string",
+          "description": "Database name to create",
+          "default": "mydb",
+          "required": false
+        },
+        "username": {
+          "type": "string",
+          "description": "Database username",
+          "default": "dbuser",
+          "required": false
+        },
+        "password": {
+          "type": "string",
+          "description": "Database password",
+          "default": "dbpass123",
+          "required": false
+        }
+      },
+      "usage": "setupx -sh install-postgres [-d <database>] [-u <username>] [-p <password>]"
+    },
+    {
+      "name": "deploy-node-app",
+      "displayName": "Node.js App Deployer",
+      "description": "Deploy Node.js application with PM2, Nginx, and SSL",
+      "category": "deployment",
+      "commands": {
+        "install": "bash scripts/deploy-node-app.sh",
+        "check": "pm2 list | grep -q",
+        "test": "pm2 status"
+      },
+      "parameters": {
+        "domain": {
+          "type": "string",
+          "description": "Domain name for the application",
+          "required": true
+        },
+        "app_name": {
+          "type": "string",
+          "description": "PM2 application name",
+          "required": true
+        },
+        "repo_url": {
+          "type": "string",
+          "description": "GitHub repository URL",
+          "required": true
+        },
+        "port": {
+          "type": "number",
+          "description": "Application port",
+          "default": 3000,
+          "required": false
+        }
+      },
+      "usage": "setupx -sh deploy-node-app"
+    },
+    {
+      "name": "nginx-domain",
+      "displayName": "Nginx Domain Setup",
+      "description": "Configure Nginx domain with SSL support",
+      "category": "web-server",
+      "commands": {
+        "install": "bash scripts/nginx-domain.sh",
+        "check": "nginx -t",
+        "test": "systemctl is-active nginx"
+      },
+      "parameters": {
+        "domain": {
+          "type": "string",
+          "description": "Domain name to configure",
+          "required": true
+        },
+        "port": {
+          "type": "number",
+          "description": "Backend application port",
+          "required": true
+        },
+        "ssl": {
+          "type": "boolean",
+          "description": "Enable SSL with Let's Encrypt",
+          "default": false,
+          "required": false
+        }
+      },
+      "usage": "setupx -sh nginx-domain -d <domain> -p <port> [-s]"
+    },
+    {
+      "name": "pm2-deploy",
+      "displayName": "PM2 Deployment",
+      "description": "Deploy application with PM2 process manager",
+      "category": "deployment",
+      "commands": {
+        "install": "bash scripts/pm2-deploy.sh",
+        "check": "pm2 list",
+        "test": "pm2 status"
+      },
+      "parameters": {
+        "app_name": {
+          "type": "string",
+          "description": "Application name for PM2",
+          "required": true
+        },
+        "port": {
+          "type": "number",
+          "description": "Application port",
+          "required": true
+        },
+        "directory": {
+          "type": "string",
+          "description": "Application directory path",
+          "required": true
+        },
+        "environment": {
+          "type": "string",
+          "description": "Environment (development/production)",
+          "default": "development",
+          "required": false
+        }
+      },
+      "usage": "setupx -sh pm2-deploy -n <app_name> -p <port> -d <directory> [-e <environment>]"
+    },
+    {
+      "name": "setcp",
+      "displayName": "Database Password Manager",
+      "description": "Reset database passwords for PostgreSQL, MySQL, and MongoDB",
+      "category": "database",
+      "commands": {
+        "install": "bash scripts/setcp.sh",
+        "check": "systemctl is-active postgresql mysql mongod",
+        "test": "psql --version && mysql --version"
+      },
+      "parameters": {
+        "database": {
+          "type": "string",
+          "description": "Database type (postgresql/mysql/mongodb)",
+          "required": true
+        },
+        "password": {
+          "type": "string",
+          "description": "New password for the database",
+          "required": true
+        }
+      },
+      "usage": "setupx -sh setcp -p <database> <password>"
+    },
+    {
+      "name": "update-all",
+      "displayName": "System Update All",
+      "description": "Update all upgradeable packages and clean up the system",
+      "category": "system",
+      "commands": {
+        "install": "bash scripts/update-all.sh",
+        "check": "apt list --upgradable | grep -q upgradable",
+        "test": "apt list --upgradable"
+      },
+      "parameters": {
+        "auto_confirm": {
+          "type": "boolean",
+          "description": "Auto-confirm all updates without prompting",
+          "default": false,
+          "required": false
+        },
+        "cleanup": {
+          "type": "boolean",
+          "description": "Clean up unused packages and cache",
+          "default": true,
+          "required": false
+        }
+      },
+      "usage": "setupx -sh update-all [-y] [--no-cleanup]"
+    },
+    {
+      "name": "reset-postgres",
+      "displayName": "Reset PostgreSQL Database",
+      "description": "Reset PostgreSQL database with default or custom parameters",
+      "category": "database",
+      "commands": {
+        "install": "bash scripts/reset-postgres.sh",
+        "check": "systemctl is-active postgresql",
+        "test": "psql --version"
+      },
+      "parameters": {
+        "database": {
+          "type": "string",
+          "description": "Database name to reset",
+          "default": "postgres",
+          "required": false
+        },
+        "username": {
+          "type": "string",
+          "description": "PostgreSQL username",
+          "default": "postgres",
+          "required": false
+        },
+        "password": {
+          "type": "string",
+          "description": "New password for PostgreSQL",
+          "default": "postgres123",
+          "required": false
+        }
+      },
+      "usage": "setupx -sh reset-postgres [-d <database>] [-u <username>] [-p <password>]"
+    },
+    {
+      "name": "reset-mariadb",
+      "displayName": "Reset MariaDB Database",
+      "description": "Reset MariaDB database with default or custom parameters",
+      "category": "database",
+      "commands": {
+        "install": "bash scripts/reset-mariadb.sh",
+        "check": "systemctl is-active mariadb",
+        "test": "mariadb --version"
+      },
+      "parameters": {
+        "database": {
+          "type": "string",
+          "description": "Database name to reset",
+          "default": "mariadb",
+          "required": false
+        },
+        "username": {
+          "type": "string",
+          "description": "MariaDB username",
+          "default": "root",
+          "required": false
+        },
+        "password": {
+          "type": "string",
+          "description": "New password for MariaDB",
+          "default": "mariadb123",
+          "required": false
+        }
+      },
+      "usage": "setupx -sh reset-mariadb [-d <database>] [-u <username>] [-p <password>]"
+    },
+    {
+      "name": "reset-mysql",
+      "displayName": "Reset MySQL Database",
+      "description": "Reset MySQL database with default or custom parameters",
+      "category": "database",
+      "commands": {
+        "install": "bash scripts/reset-mysql.sh",
+        "check": "systemctl is-active mysql",
+        "test": "mysql --version"
+      },
+      "parameters": {
+        "database": {
+          "type": "string",
+          "description": "Database name to reset",
+          "default": "mysql",
+          "required": false
+        },
+        "username": {
+          "type": "string",
+          "description": "MySQL username",
+          "default": "root",
+          "required": false
+        },
+        "password": {
+          "type": "string",
+          "description": "New password for MySQL",
+          "default": "mysql123",
+          "required": false
+        }
+      },
+      "usage": "setupx -sh reset-mysql [-d <database>] [-u <username>] [-p <password>]"
+    },
+    {
+      "name": "reset-mongodb",
+      "displayName": "Reset MongoDB Database",
+      "description": "Reset MongoDB database with default or custom parameters",
+      "category": "database",
+      "commands": {
+        "install": "bash scripts/reset-mongodb.sh",
+        "check": "systemctl is-active mongod",
+        "test": "mongod --version"
+      },
+      "parameters": {
+        "database": {
+          "type": "string",
+          "description": "Database name to reset",
+          "default": "mongodb",
+          "required": false
+        },
+        "username": {
+          "type": "string",
+          "description": "MongoDB username",
+          "default": "admin",
+          "required": false
+        },
+        "password": {
+          "type": "string",
+          "description": "New password for MongoDB",
+          "default": "mongodb123",
+          "required": false
+        }
+      },
+      "usage": "setupx -sh reset-mongodb [-d <database>] [-u <username>] [-p <password>]"
+    },
+    {
+      "name": "deploy-node-git",
+      "displayName": "Deploy Node.js App from Git",
+      "description": "Deploy Node.js application from Git repository with Nginx and PM2",
+      "category": "deployment",
+      "commands": {
+        "install": "bash scripts/deploy-node-git.sh",
+        "check": "pm2 list | grep -q",
+        "test": "pm2 status"
+      },
+      "parameters": {
+        "web_name": {
+          "type": "string",
+          "description": "Name for the web application",
+          "required": true
+        },
+        "app_name": {
+          "type": "string",
+          "description": "Name for the PM2 application",
+          "required": true
+        },
+        "git_url": {
+          "type": "string",
+          "description": "Git repository URL",
+          "required": true
+        },
+        "port": {
+          "type": "number",
+          "description": "Application port",
+          "default": 3000,
+          "required": false
+        }
+      },
+      "usage": "setupx -sh deploy-node-git -w <web_name> -a <app_name> -g <git_url> [-p <port>]"
+    },
+    {
+      "name": "ssl-setup",
+      "displayName": "SSL Certificate Setup",
+      "description": "Setup SSL certificates with Let's Encrypt for domain and www",
+      "category": "security",
+      "commands": {
+        "install": "bash scripts/ssl-setup.sh",
+        "check": "certbot certificates",
+        "test": "nginx -t"
+      },
+      "parameters": {
+        "domain": {
+          "type": "string",
+          "description": "Domain name for SSL certificate",
+          "required": true
+        },
+        "include_www": {
+          "type": "boolean",
+          "description": "Include www subdomain",
+          "default": true,
+          "required": false
+        }
+      },
+      "usage": "setupx -sh ssl-setup -d <domain> [--no-www]"
+    },
+    {
+      "name": "postgres-remote",
+      "displayName": "PostgreSQL Remote Server Setup",
+      "description": "Configure PostgreSQL for remote connections",
+      "category": "database",
+      "commands": {
+        "install": "bash scripts/postgres-remote.sh",
+        "check": "systemctl is-active postgresql",
+        "test": "psql -h localhost -U postgres -c 'SELECT version();'"
+      },
+      "parameters": {
+        "port": {
+          "type": "number",
+          "description": "PostgreSQL port",
+          "default": 5432,
+          "required": false
+        },
+        "allowed_ips": {
+          "type": "string",
+          "description": "Comma-separated list of allowed IP addresses",
+          "default": "0.0.0.0/0",
+          "required": false
+        }
+      },
+      "usage": "setupx -sh postgres-remote [-p <port>] [-i <allowed_ips>]"
+    }
+  ]
+}
