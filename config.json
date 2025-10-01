@@ -1,0 +1,79 @@
+{
+  "name": "SetupX",
+  "version": "2.0.0",
+  "description": "Modular Linux Development Environment Setup Tool - JSON-Driven Architecture",
+  "author": "anshulyadav32",
+  "repository": "https://github.com/anshulyadav32/setupx-linux-setup",
+  "installPath": "/usr/local/bin/setupx",
+  "logLevel": "INFO",
+  "autoUpdate": true,
+  
+  "cli": {
+    "name": "setupx",
+    "aliases": ["wsx"],
+    "banner": {
+      "enabled": true,
+      "title": "SetupX",
+      "subtitle": "Modular Linux Development Setup Tool",
+      "description": "JSON-Driven Architecture"
+    }
+  },
+  
+  "paths": {
+    "modules": "src/config/modules",
+    "core": "src/core",
+    "utils": "src/utils"
+  },
+  
+  "statusCheck": {
+    "commonTools": [
+      "apt",
+      "snap",
+      "flatpak",
+      "nvm",
+      "npm",
+      "pip",
+      "gh",
+      "jdk",
+      "nodejs",
+      "python",
+      "docker",
+      "curl",
+      "wget",
+      "vim",
+      "nano",
+      "chrome-remote-desktop",
+      "ssh",
+      "ufw",
+      "fail2ban",
+      "pm2",
+      "psql",
+      "mysql",
+      "nginx",
+      "certbot",
+      "gcprootlogin",
+      "system-update",
+      "backup-system",
+      "setcp",
+      "nginx-domain",
+      "pm2-deploy"
+    ]
+  },
+  
+  "installation": {
+    "installPath": "/usr/local/bin/setupx",
+    "executablePath": "/usr/local/bin/setupx/setupx.sh",
+    "pathVariable": "/usr/local/bin/setupx",
+    "quickInstall": {
+      "description": "One-command SetupX installation",
+      "command": "curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-setup/main/install.sh | bash"
+    }
+  },
+  
+  "support": {
+    "issues": "https://github.com/anshulyadav32/setupx-linux-setup/issues",
+    "documentation": "https://github.com/anshulyadav32/setupx-linux-setup/wiki",
+    "discussions": "https://github.com/anshulyadav32/setupx-linux-setup/discussions"
+  }
+}
+

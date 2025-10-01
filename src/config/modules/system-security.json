@@ -1,0 +1,78 @@
+{
+  "name": "system-security",
+  "displayName": "System Security",
+  "description": "SSH configuration, firewall setup, and system security tools",
+  "category": "security",
+  "priority": 1,
+  "status": "fully-working",
+  "components": {
+    "ssh-config": {
+      "name": "ssh-config",
+      "displayName": "SSH Configuration",
+      "description": "Configure SSH for secure remote access",
+      "installMethod": "script",
+      "website": "https://www.openssh.com/",
+      "status": "working",
+      "category": "system-security",
+      "commands": {
+        "install": "sudo systemctl enable ssh && sudo systemctl start ssh && sudo sed -i 's/#PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config && sudo sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config && sudo systemctl restart ssh",
+        "remove": "sudo systemctl stop ssh && sudo systemctl disable ssh",
+        "update": "sudo systemctl restart ssh",
+        "check": "systemctl is-active ssh >/dev/null 2>&1",
+        "verify": "sudo systemctl status ssh",
+        "test": "ssh -V"
+      }
+    },
+    "ufw": {
+      "name": "ufw",
+      "displayName": "UFW Firewall",
+      "description": "Uncomplicated Firewall for Ubuntu",
+      "installMethod": "apt",
+      "website": "https://help.ubuntu.com/community/UFW",
+      "status": "working",
+      "category": "system-security",
+      "commands": {
+        "install": "sudo apt update && sudo apt install -y ufw && sudo ufw --force enable && sudo ufw default deny incoming && sudo ufw default allow outgoing && sudo ufw allow ssh && sudo ufw allow 22/tcp",
+        "remove": "sudo ufw --force disable && sudo apt remove -y ufw",
+        "update": "sudo apt update && sudo apt upgrade -y ufw",
+        "check": "command -v ufw >/dev/null 2>&1",
+        "verify": "sudo ufw status",
+        "test": "sudo ufw status verbose"
+      }
+    },
+    "fail2ban": {
+      "name": "fail2ban",
+      "displayName": "Fail2Ban",
+      "description": "Intrusion prevention software",
+      "installMethod": "apt",
+      "website": "https://www.fail2ban.org/",
+      "status": "available",
+      "category": "system-security",
+      "commands": {
+        "install": "sudo apt update && sudo apt install -y fail2ban && sudo systemctl enable fail2ban && sudo systemctl start fail2ban",
+        "remove": "sudo systemctl stop fail2ban && sudo systemctl disable fail2ban && sudo apt remove -y fail2ban",
+        "update": "sudo apt update && sudo apt upgrade -y fail2ban",
+        "check": "systemctl is-active fail2ban >/dev/null 2>&1",
+        "verify": "sudo systemctl status fail2ban",
+        "test": "sudo fail2ban-client status"
+      }
+    },
+    "openssh-server": {
+      "name": "openssh-server",
+      "displayName": "OpenSSH Server",
+      "description": "SSH server for remote access",
+      "installMethod": "apt",
+      "website": "https://www.openssh.com/",
+      "status": "working",
+      "category": "system-security",
+      "commands": {
+        "install": "sudo apt update && sudo apt install -y openssh-server",
+        "remove": "sudo apt remove -y openssh-server",
+        "update": "sudo apt update && sudo apt upgrade -y openssh-server",
+        "check": "systemctl is-active ssh >/dev/null 2>&1",
+        "verify": "sudo systemctl status ssh",
+        "test": "ssh -V"
+      }
+    }
+  }
+}

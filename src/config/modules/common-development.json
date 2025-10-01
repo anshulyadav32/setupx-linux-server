@@ -1,0 +1,144 @@
+{
+  "name": "common-development",
+  "displayName": "Common Development Tools",
+  "description": "Essential development tools used across all programming languages",
+  "category": "development",
+  "priority": 3,
+  "status": "fully-working",
+  "components": {
+    "curl": {
+      "name": "curl",
+      "displayName": "cURL",
+      "description": "Command-line tool for transferring data",
+      "installMethod": "apt",
+      "website": "https://curl.se",
+      "status": "working",
+      "category": "common-development",
+      "commands": {
+        "install": "sudo apt update && sudo apt install -y curl",
+        "remove": "sudo apt remove -y curl",
+        "update": "sudo apt update && sudo apt upgrade -y curl",
+        "check": "command -v curl >/dev/null 2>&1",
+        "verify": "curl --version",
+        "test": "curl --help"
+      }
+    },
+    "wget": {
+      "name": "wget",
+      "displayName": "Wget",
+      "description": "Command-line utility for downloading files",
+      "installMethod": "apt",
+      "website": "https://www.gnu.org/software/wget/",
+      "status": "working",
+      "category": "common-development",
+      "commands": {
+        "install": "sudo apt update && sudo apt install -y wget",
+        "remove": "sudo apt remove -y wget",
+        "update": "sudo apt update && sudo apt upgrade -y wget",
+        "check": "command -v wget >/dev/null 2>&1",
+        "verify": "wget --version",
+        "test": "wget --help"
+      }
+    },
+    "gh": {
+      "name": "gh",
+      "displayName": "GitHub CLI (gh)",
+      "description": "GitHub's official command-line interface",
+      "installMethod": "apt",
+      "website": "https://cli.github.com/",
+      "status": "available",
+      "category": "common-development",
+      "commands": {
+        "install": "sudo apt update && sudo apt install -y gh",
+        "remove": "sudo apt remove -y gh",
+        "update": "sudo apt update && sudo apt upgrade -y gh",
+        "check": "command -v gh >/dev/null 2>&1",
+        "verify": "gh --version",
+        "test": "gh --help"
+      }
+    },
+    "vim": {
+      "name": "vim",
+      "displayName": "Vim",
+      "description": "Vi IMproved text editor",
+      "installMethod": "apt",
+      "website": "https://www.vim.org/",
+      "status": "available",
+      "category": "common-development",
+      "commands": {
+        "install": "sudo apt update && sudo apt install -y vim",
+        "remove": "sudo apt remove -y vim",
+        "update": "sudo apt update && sudo apt upgrade -y vim",
+        "check": "command -v vim >/dev/null 2>&1",
+        "verify": "vim --version",
+        "test": "vim --help"
+      }
+    },
+    "nano": {
+      "name": "nano",
+      "displayName": "Nano",
+      "description": "Simple text editor",
+      "installMethod": "apt",
+      "website": "https://www.nano-editor.org/",
+      "status": "available",
+      "category": "common-development",
+      "commands": {
+        "install": "sudo apt update && sudo apt install -y nano",
+        "remove": "sudo apt remove -y nano",
+        "update": "sudo apt update && sudo apt upgrade -y nano",
+        "check": "command -v nano >/dev/null 2>&1",
+        "verify": "nano --version",
+        "test": "nano --help"
+      }
+    },
+    "jdk": {
+      "name": "jdk",
+      "displayName": "OpenJDK 17",
+      "description": "Java Development Kit",
+      "installMethod": "apt",
+      "website": "https://openjdk.org/",
+      "status": "available",
+      "category": "common-development",
+      "commands": {
+        "install": "sudo apt update && sudo apt install -y openjdk-17-jdk",
+        "remove": "sudo apt remove -y openjdk-17-jdk",
+        "update": "sudo apt update && sudo apt upgrade -y openjdk-17-jdk",
+        "check": "command -v java >/dev/null 2>&1",
+        "verify": "java -version"
+      }
+    },
+    "docker": {
+      "name": "docker",
+      "displayName": "Docker",
+      "description": "Container platform",
+      "installMethod": "apt",
+      "website": "https://www.docker.com/",
+      "status": "available",
+      "category": "common-development",
+      "commands": {
+        "install": "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh",
+        "remove": "sudo apt remove -y docker-ce docker-ce-cli containerd.io",
+        "update": "sudo apt update && sudo apt upgrade -y docker-ce",
+        "check": "command -v docker >/dev/null 2>&1",
+        "verify": "docker --version"
+      }
+    },
+    "chrome-remote-desktop": {
+      "name": "chrome-remote-desktop",
+      "displayName": "Chrome Remote Desktop",
+      "description": "Remote desktop access via Chrome browser",
+      "installMethod": "apt",
+      "website": "https://remotedesktop.google.com/",
+      "status": "available",
+      "category": "common-development",
+      "commands": {
+        "install": "wget -qO - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add - && echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list && sudo apt update && sudo apt install -y google-chrome-stable",
+        "remove": "sudo apt remove -y google-chrome-stable && sudo rm -f /etc/apt/sources.list.d/google-chrome.list",
+        "update": "sudo apt update && sudo apt upgrade -y google-chrome-stable",
+        "check": "command -v google-chrome >/dev/null 2>&1",
+        "verify": "google-chrome --version"
+      }
+    }
+  }
+}
+
