@@ -252,12 +252,72 @@ nav a:hover {
     background: #5a6fd8;
 }
 
+/* GitHub Links */
+.github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.3s ease;
+}
+
+.github-link:hover {
+    opacity: 0.8;
+}
+
+.github-link svg {
+    transition: transform 0.2s ease;
+}
+
+.github-link:hover svg {
+    transform: scale(1.1);
+}
+
+/* Documentation Links */
+.doc-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+    padding: 1rem 2rem;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
 /* Footer */
 footer {
     background: #333;
     color: white;
     text-align: center;
     padding: 2rem 0;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer-links {
+    display: flex;
+    gap: 1rem;
 }
 
 /* Responsive Design */
@@ -287,6 +347,20 @@ footer {
     .code-block {
         flex-direction: column;
         align-items: stretch;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .doc-links {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .github-link {
+        justify-content: center;
     }
 }
 
