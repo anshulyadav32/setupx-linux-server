@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "setupx-linux-server",
   "builds": [
     {
       "src": "index.html",
@@ -31,10 +30,5 @@
         }
       ]
     }
-  ],
-  "functions": {
-    "index.html": {
-      "runtime": "@vercel/static"
-    }
-  }
+  ]
 }
