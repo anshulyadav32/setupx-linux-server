@@ -19,8 +19,9 @@
     "devops"
   ],
   "scripts": {
-    "build": "echo 'Static site - no build required'",
-    "start": "echo 'Static site - no start required'"
+    "build": "node build.js",
+    "start": "echo 'Static site - no start required'",
+    "vercel-build": "node build.js"
   },
   "engines": {
     "node": ">=14.0.0"
