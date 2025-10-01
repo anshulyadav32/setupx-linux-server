@@ -1,0 +1,98 @@
+{
+  "name": "cloud-development",
+  "displayName": "Cloud Development",
+  "description": "Cloud development tools for AWS, Azure, Google Cloud, and Kubernetes",
+  "category": "development",
+  "priority": 5,
+  "status": "fully-working",
+  "components": {
+    "aws-cli": {
+      "name": "aws-cli",
+      "displayName": "AWS CLI",
+      "description": "Command line interface for Amazon Web Services",
+      "installMethod": "chocolatey",
+      "website": "https://aws.amazon.com/cli",
+      "status": "working",
+      "category": "cloud-development",
+      "commands": {
+        "install": "choco install awscli -y",
+        "remove": "choco uninstall awscli -y",
+        "update": "choco upgrade awscli -y",
+        "check": "aws --version",
+        "verify": "aws configure list",
+        "test": "aws help",
+        "path": "$env:Path = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User')"
+      }
+    },
+    "azure-cli": {
+      "name": "azure-cli",
+      "displayName": "Azure CLI",
+      "description": "Command line interface for Microsoft Azure",
+      "installMethod": "chocolatey",
+      "website": "https://docs.microsoft.com/en-us/cli/azure",
+      "status": "working",
+      "category": "cloud-development",
+      "commands": {
+        "install": "choco install azure-cli -y",
+        "remove": "choco uninstall azure-cli -y",
+        "update": "choco upgrade azure-cli -y",
+        "check": "az --version",
+        "verify": "az account show",
+        "test": "az --help",
+        "path": "$env:Path = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User')"
+      }
+    },
+    "gcloud-cli": {
+      "name": "gcloud-cli",
+      "displayName": "Google Cloud CLI",
+      "description": "Command line interface for Google Cloud Platform",
+      "installMethod": "chocolatey",
+      "website": "https://cloud.google.com/sdk",
+      "status": "working",
+      "category": "cloud-development",
+      "commands": {
+        "install": "choco install gcloudsdk -y",
+        "remove": "choco uninstall gcloudsdk -y",
+        "update": "choco upgrade gcloudsdk -y",
+        "check": "gcloud --version",
+        "verify": "gcloud info",
+        "test": "gcloud help"
+      }
+    },
+    "kubectl": {
+      "name": "kubectl",
+      "displayName": "Kubernetes kubectl",
+      "description": "Kubernetes command-line tool",
+      "installMethod": "chocolatey",
+      "website": "https://kubernetes.io",
+      "status": "working",
+      "category": "cloud-development",
+      "commands": {
+        "install": "choco install kubernetes-cli -y",
+        "remove": "choco uninstall kubernetes-cli -y",
+        "update": "choco upgrade kubernetes-cli -y",
+        "check": "kubectl version --client",
+        "verify": "kubectl --help",
+        "test": "kubectl cluster-info"
+      }
+    },
+    "terraform": {
+      "name": "terraform",
+      "displayName": "Terraform",
+      "description": "Infrastructure as code tool",
+      "installMethod": "chocolatey",
+      "website": "https://terraform.io",
+      "status": "working",
+      "category": "cloud-development",
+      "commands": {
+        "install": "choco install terraform -y",
+        "remove": "choco uninstall terraform -y",
+        "update": "choco upgrade terraform -y",
+        "check": "terraform --version",
+        "verify": "terraform --help",
+        "test": "terraform version"
+      }
+    }
+  }
+}
+

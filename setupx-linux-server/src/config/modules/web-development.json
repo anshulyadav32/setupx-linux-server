@@ -1,0 +1,215 @@
+{
+  "name": "web-development",
+  "displayName": "Web Development",
+  "description": "Complete web development environment with Node.js, databases, PM2, Nginx, SSL, and modern frameworks",
+  "category": "development",
+  "priority": 2,
+  "status": "fully-working",
+  "components": {
+    "nodejs": {
+      "name": "nodejs",
+      "displayName": "Node.js & npm",
+      "description": "JavaScript runtime and package manager",
+      "installMethod": "apt",
+      "website": "https://nodejs.org",
+      "status": "working",
+      "category": "web-development",
+      "commands": {
+        "install": "sudo apt update && sudo apt install -y nodejs npm",
+        "remove": "sudo apt remove -y nodejs npm",
+        "update": "sudo apt update && sudo apt upgrade -y nodejs npm",
+        "check": "command -v node >/dev/null 2>&1",
+        "verify": "node --version",
+        "test": "node -e \"console.log('Node.js is working!')\""
+      }
+    },
+    "yarn": {
+      "name": "yarn",
+      "displayName": "Yarn Package Manager",
+      "description": "Fast, reliable, and secure dependency management",
+      "installMethod": "npm",
+      "website": "https://yarnpkg.com",
+      "status": "working",
+      "category": "web-development",
+      "commands": {
+        "install": "npm install -g yarn",
+        "remove": "npm uninstall -g yarn",
+        "update": "npm update -g yarn",
+        "check": "yarn --version",
+        "verify": "yarn --version",
+        "test": "yarn --help"
+      }
+    },
+    "react-tools": {
+      "name": "react-tools",
+      "displayName": "React Development Tools",
+      "description": "Create React App and React utilities",
+      "installMethod": "npm",
+      "website": "https://reactjs.org",
+      "status": "working",
+      "category": "web-development",
+      "commands": {
+        "install": "npm install -g create-react-app",
+        "remove": "npm uninstall -g create-react-app",
+        "update": "npm update -g create-react-app",
+        "check": "create-react-app --version",
+        "verify": "create-react-app --help",
+        "test": "npm list -g create-react-app"
+      }
+    },
+    "vue-tools": {
+      "name": "vue-tools",
+      "displayName": "Vue.js Development Tools",
+      "description": "Vue CLI and Vue utilities",
+      "installMethod": "npm",
+      "website": "https://vuejs.org",
+      "status": "working",
+      "category": "web-development",
+      "commands": {
+        "install": "npm install -g @vue/cli",
+        "remove": "npm uninstall -g @vue/cli",
+        "update": "npm update -g @vue/cli",
+        "check": "vue --version",
+        "verify": "vue --help",
+        "test": "npm list -g @vue/cli"
+      }
+    },
+    "angular-tools": {
+      "name": "angular-tools",
+      "displayName": "Angular Development Tools",
+      "description": "Angular CLI and Angular utilities",
+      "installMethod": "npm",
+      "website": "https://angular.io",
+      "status": "working",
+      "category": "web-development",
+      "commands": {
+        "install": "npm install -g @angular/cli",
+        "remove": "npm uninstall -g @angular/cli",
+        "update": "npm update -g @angular/cli",
+        "check": "ng version",
+        "verify": "ng --help",
+        "test": "npm list -g @angular/cli"
+      }
+    },
+    "vite": {
+      "name": "vite",
+      "displayName": "Vite",
+      "description": "Next generation frontend tooling",
+      "installMethod": "npm",
+      "website": "https://vitejs.dev",
+      "status": "working",
+      "category": "web-development",
+      "commands": {
+        "install": "npm install -g vite",
+        "remove": "npm uninstall -g vite",
+        "update": "npm update -g vite",
+        "check": "vite --version",
+        "verify": "vite --help",
+        "test": "npm list -g vite"
+      }
+    },
+    "pm2": {
+      "name": "pm2",
+      "displayName": "PM2 Process Manager",
+      "description": "Production process manager for Node.js applications",
+      "installMethod": "npm",
+      "website": "https://pm2.keymetrics.io/",
+      "status": "working",
+      "category": "web-development",
+      "commands": {
+        "install": "npm install -g pm2",
+        "remove": "npm uninstall -g pm2",
+        "update": "npm update -g pm2",
+        "check": "command -v pm2 >/dev/null 2>&1",
+        "verify": "pm2 --version",
+        "test": "pm2 list"
+      }
+    },
+    "postgresql": {
+      "name": "postgresql",
+      "displayName": "PostgreSQL",
+      "description": "Advanced open source relational database",
+      "installMethod": "apt",
+      "website": "https://www.postgresql.org/",
+      "status": "working",
+      "category": "web-development",
+      "commands": {
+        "install": "sudo apt update && sudo apt install -y postgresql postgresql-contrib",
+        "remove": "sudo apt remove -y postgresql postgresql-contrib",
+        "update": "sudo apt update && sudo apt upgrade -y postgresql postgresql-contrib",
+        "check": "command -v psql >/dev/null 2>&1",
+        "verify": "psql --version",
+        "test": "sudo -u postgres psql -c 'SELECT version();'"
+      }
+    },
+    "mysql": {
+      "name": "mysql",
+      "displayName": "MySQL",
+      "description": "Open source relational database management system",
+      "installMethod": "apt",
+      "website": "https://www.mysql.com/",
+      "status": "working",
+      "category": "web-development",
+      "commands": {
+        "install": "sudo apt update && sudo apt install -y mysql-server",
+        "remove": "sudo apt remove -y mysql-server",
+        "update": "sudo apt update && sudo apt upgrade -y mysql-server",
+        "check": "command -v mysql >/dev/null 2>&1",
+        "verify": "mysql --version",
+        "test": "sudo mysql -e 'SELECT VERSION();'"
+      }
+    },
+    "nginx": {
+      "name": "nginx",
+      "displayName": "Nginx",
+      "description": "High performance web server and reverse proxy",
+      "installMethod": "apt",
+      "website": "https://nginx.org/",
+      "status": "working",
+      "category": "web-development",
+      "commands": {
+        "install": "sudo apt update && sudo apt install -y nginx",
+        "remove": "sudo apt remove -y nginx",
+        "update": "sudo apt update && sudo apt upgrade -y nginx",
+        "check": "command -v nginx >/dev/null 2>&1",
+        "verify": "nginx -v",
+        "test": "sudo systemctl status nginx"
+      }
+    },
+    "ssl-certbot": {
+      "name": "ssl-certbot",
+      "displayName": "SSL Certbot",
+      "description": "Free SSL certificate automation with Let's Encrypt",
+      "installMethod": "apt",
+      "website": "https://certbot.eff.org/",
+      "status": "working",
+      "category": "web-development",
+      "commands": {
+        "install": "sudo apt update && sudo apt install -y certbot python3-certbot-nginx",
+        "remove": "sudo apt remove -y certbot python3-certbot-nginx",
+        "update": "sudo apt update && sudo apt upgrade -y certbot python3-certbot-nginx",
+        "check": "command -v certbot >/dev/null 2>&1",
+        "verify": "certbot --version",
+        "test": "certbot --help"
+      }
+    },
+    "docker": {
+      "name": "docker",
+      "displayName": "Docker",
+      "description": "Container platform for applications",
+      "installMethod": "script",
+      "website": "https://www.docker.com/",
+      "status": "working",
+      "category": "web-development",
+      "commands": {
+        "install": "curl -fsSL https://get.docker.com -o get-docker.sh && sudo sh get-docker.sh && sudo usermod -aG docker $USER",
+        "remove": "sudo apt remove -y docker-ce docker-ce-cli containerd.io",
+        "update": "sudo apt update && sudo apt upgrade -y docker-ce",
+        "check": "command -v docker >/dev/null 2>&1",
+        "verify": "docker --version",
+        "test": "docker run hello-world"
+      }
+    }
+  }
+}
+

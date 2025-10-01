@@ -1,0 +1,14 @@
+# Ignore files for Vercel deployment
+node_modules/
+.git/
+.github/
+docs/
+scripts/
+src/
+test/
+config.json
+setupx
+setupx.sh
+slx
+*.md
+!README.md
