@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ github-pages, main ]
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -20,25 +20,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
+        
       - name: Setup Pages
         uses: actions/configure-pages@v4
-
-      - name: Copy website files to root
-        run: |
-          # Copy website files to the root directory for GitHub Pages
-          cp -r .website/* .
-          # Create a simple index.html if it doesn't exist
-          if [ ! -f index.html ]; then
-            echo "No index.html found, creating a basic one"
-            echo '<!DOCTYPE html><html><head><title>SetupX Linux Server</title></head><body><h1>SetupX Linux Server</h1><p>Website coming soon...</p></body></html>' > index.html
-          fi
-
+        
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
-
+          
   deploy:
     environment:
       name: github-pages
