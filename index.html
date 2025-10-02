@@ -152,20 +152,20 @@
 
         <div class="stats">
             <div class="stat">
-                <div class="stat-number">10</div>
+                <div class="stat-number">19</div>
                 <div>Utility Scripts</div>
             </div>
             <div class="stat">
-                <div class="stat-number">9</div>
+                <div class="stat-number">10</div>
                 <div>JSON Modules</div>
             </div>
             <div class="stat">
-                <div class="stat-number">36+</div>
+                <div class="stat-number">80+</div>
                 <div>Components</div>
             </div>
             <div class="stat">
-                <div class="stat-number">100%</div>
-                <div>JSON-Driven</div>
+                <div class="stat-number">WSL</div>
+                <div>Windows Support</div>
             </div>
         </div>
 
@@ -200,25 +200,38 @@
                 <p>Configure PostgreSQL for remote connections with proper security.</p>
                 <div class="code">setupx -sh postgres-remote -p 5432 -i 192.168.1.0/24</div>
             </div>
+            <div class="feature">
+                <h3>🪟 Windows WSL Support</h3>
+                <p>Run SetupX on Windows with WSL (Windows Subsystem for Linux) for cross-platform development.</p>
+                <div class="code">wsl bash setupx.sh -sh nginx-domain -d example.com -p 3000</div>
+            </div>
+            <div class="feature">
+                <h3>🌐 Web Server Setup</h3>
+                <p>Configure Nginx and Apache domains with SSL certificates and reverse proxy.</p>
+                <div class="code">setupx -sh apache-domain -d example.com -p 3000 -s</div>
+            </div>
         </div>
 
         <div class="card">
             <h2>📋 Available Commands</h2>
             <div class="code">
-# Component Management<br>
+# Linux/Ubuntu Commands<br>
 setupx install curl<br>
 setupx check nodejs<br>
-setupx list<br><br>
+setupx list<br>
+setupx -sh nginx-domain -d example.com -p 3000<br>
+setupx install-module web-development<br><br>
 
-# Script Execution<br>
+# Windows WSL Commands<br>
+wsl bash setupx.sh help<br>
+wsl bash setupx.sh list<br>
+wsl bash setupx.sh -sh apache-domain -d example.com -p 3000<br>
+wsl bash setupx.sh install-module web-development<br><br>
+
+# Database Management<br>
 setupx -sh reset-postgres -d mydb -u dbuser -p dbpass123<br>
-setupx -sh deploy-node-git -w myapp -a myapp-pm2 -g https://github.com/user/repo.git<br>
-setupx -sh ssl-setup -d example.com<br><br>
-
-# Module Installation<br>
-setupx install-module server-setup<br>
-setupx install-module web-development<br>
-setupx install-module common-development
+setupx -sh setcp -p postgresql newpass123<br>
+setupx -sh database-manager status
             </div>
         </div>
 
@@ -227,10 +240,11 @@ setupx install-module common-development
             <p>SetupX uses a modular JSON-driven architecture:</p>
             <ul>
                 <li><strong>CLI Interface:</strong> setupx, setupx.sh, slx commands</li>
-                <li><strong>JSON Modules:</strong> 9 module definitions for different development environments</li>
-                <li><strong>Utility Scripts:</strong> 10 specialized scripts for common tasks</li>
+                <li><strong>JSON Modules:</strong> 10 module definitions for different development environments</li>
+                <li><strong>Utility Scripts:</strong> 19 specialized scripts for common tasks</li>
                 <li><strong>Core Engine:</strong> Dynamic component loading and execution</li>
-                <li><strong>Test Suite:</strong> Comprehensive testing framework</li>
+                <li><strong>Cross-Platform:</strong> Linux native + Windows WSL support</li>
+                <li><strong>Interactive Menus:</strong> Guided setup with step-by-step prompts</li>
             </ul>
         </div>
 
