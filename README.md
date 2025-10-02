@@ -119,6 +119,113 @@ setupx -sh backup-system
 - **devops**: Docker, Kubernetes, CI/CD tools
 - **scripts**: Database management, Nginx setup, PM2 deployment
 
+## ⚡ One-Liner Component Installation
+
+### **Package Managers**
+```bash
+# Install APT package manager
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install apt
+
+# Install Snap package manager
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install snap
+
+# Install Flatpak package manager
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install flatpak
+
+# Install NPM package manager
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install npm
+```
+
+### **Web Development Tools**
+```bash
+# Install Node.js
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install nodejs
+
+# Install PM2 process manager
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install pm2
+
+# Install PostgreSQL database
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install postgresql
+
+# Install MySQL database
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install mysql
+
+# Install Nginx web server
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install nginx
+
+# Install Docker containerization
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install docker
+```
+
+### **Development Tools**
+```bash
+# Install Git version control
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install git
+
+# Install Python programming language
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install python
+
+# Install cURL command-line tool
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install curl
+
+# Install Wget download tool
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install wget
+
+# Install Vim text editor
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install vim
+```
+
+### **Security Tools**
+```bash
+# Install UFW firewall
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install ufw
+
+# Install Fail2Ban intrusion prevention
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install fail2ban
+
+# Install OpenSSH server
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install openssh-server
+```
+
+### **Cloud & DevOps Tools**
+```bash
+# Install AWS CLI
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install aws-cli
+
+# Install Azure CLI
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install azure-cli
+
+# Install Google Cloud CLI
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install gcloud
+
+# Install Kubernetes
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx install kubectl
+```
+
+### **Database Management Scripts**
+```bash
+# Reset PostgreSQL password
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh setcp -p postgresql newpass123
+
+# Reset MySQL password
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh setcp -p mysql newpass123
+
+# Reset MongoDB password
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh setcp -p mongodb newpass123
+```
+
+### **Web Server & Domain Setup**
+```bash
+# Setup Nginx domain with SSL
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh nginx-domain -d example.com -p 3000 -s
+
+# Deploy application with PM2
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh pm2-deploy -n myapp -p 3000 -d /var/www/myapp
+
+# Enable GCP root login
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh gcprootlogin -p rootpass ubuntupass
+```
+
 ## 🚀 Complete Workflow Examples
 
 ### **Full-Stack Web Application Setup**
