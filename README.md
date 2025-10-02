@@ -218,11 +218,29 @@ setupx scripts-menu
 
 #### **2) 🔧 Run Scripts (Main Menu)**
 - **📋 List All Scripts** - Show all available scripts
+  ```bash
+  setupx scripts
+  ```
 - **🚀 Run Script by Name** - Execute any script directly
+  ```bash
+  setupx -sh <script-name> [args]
+  ```
 - **🌐 Nginx Domain Setup (Guided)** - Step-by-step domain configuration
+  ```bash
+  setupx -sh nginx-domain -d example.com -p 3000 -s
+  ```
 - **🚀 PM2 Deployment (Guided)** - Guided application deployment
+  ```bash
+  setupx -sh pm2-deploy -n myapp -p 3000 -d /var/www/myapp -e production
+  ```
 - **🗄️ Database Management (Guided)** - Comprehensive database setup
+  ```bash
+  setupx -sh database-manager install-postgresql
+  ```
 - **🔐 Security Setup (Guided)** - Security configuration wizard
+  ```bash
+  setupx -sh final-ssh-root-login -p rootpass
+  ```
 
 #### **3) 📋 List Modules**
 - **Show All Modules** - Display available development modules
