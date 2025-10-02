@@ -165,6 +165,219 @@ All script categories include guided input forms with:
 - **Clear Screen** - Clean interface with screen clearing
 - **Press Enter** - Continue prompts for better user experience
 
+## 📋 Complete Menu System
+
+### **Main Menu Options**
+```bash
+# Launch main interactive menu
+setupx menu
+```
+
+**Main Menu Structure:**
+```
+🚀 SetupX Interactive Menu
+==========================
+
+1) 📦 Install Components
+2) 🔧 Run Scripts  
+3) 📋 List Modules
+4) 🔍 Search Components
+5) 📊 System Status
+6) ❓ Help
+7) 🚪 Exit
+```
+
+### **Scripts-Only Menu Options**
+```bash
+# Launch dedicated scripts menu
+setupx scripts-menu
+```
+
+**Scripts Menu Structure:**
+```
+🔧 SetupX Scripts Menu
+=====================
+
+1) 🌐 Nginx Domain Setup
+2) 🚀 PM2 Deployment
+3) 🗄️ Database Management
+4) 🔐 Security Setup
+5) 📊 System Administration
+6) 🔧 Development Tools
+7) 📋 List All Scripts
+8) 🔙 Back to Main Menu
+```
+
+### **Detailed Menu Options
+
+#### **1) 📦 Install Components**
+- **Install by Module** - Install complete development stacks
+- **Install Individual Components** - Install specific tools
+- **Module Selection** - Choose from available modules
+- **Component Selection** - Pick specific components
+
+#### **2) 🔧 Run Scripts (Main Menu)**
+- **📋 List All Scripts** - Show all available scripts
+- **🚀 Run Script by Name** - Execute any script directly
+- **🌐 Nginx Domain Setup (Guided)** - Step-by-step domain configuration
+- **🚀 PM2 Deployment (Guided)** - Guided application deployment
+- **🗄️ Database Management (Guided)** - Comprehensive database setup
+- **🔐 Security Setup (Guided)** - Security configuration wizard
+
+#### **3) 📋 List Modules**
+- **Show All Modules** - Display available development modules
+- **Module Details** - View components in each module
+- **Installation Status** - Check what's already installed
+
+#### **4) 🔍 Search Components**
+- **Search by Name** - Find specific components
+- **Search by Category** - Browse by development area
+- **Search Results** - View matching components
+
+#### **5) 📊 System Status**
+- **SetupX Status** - Check installation and configuration
+- **System Information** - View system details
+- **Module Status** - Check installed modules
+- **Script Status** - Verify script availability
+
+#### **6) ❓ Help**
+- **Command Reference** - All available commands
+- **Usage Examples** - Common use cases
+- **Troubleshooting** - Common issues and solutions
+
+### **Scripts Menu Categories**
+
+#### **🌐 Nginx Scripts**
+```
+🌐 Nginx Scripts
+================
+
+1) 🌐 Setup Nginx Domain (Guided)
+2) 🔒 Setup SSL Certificate (Guided)  
+3) 📋 List Nginx Scripts
+4) 🔙 Back to Scripts Menu
+```
+
+#### **🚀 PM2 Scripts**
+```
+🚀 PM2 Scripts
+==============
+
+1) 🚀 PM2 Deployment (Guided)
+2) 📦 Deploy from Git (Guided)
+3) 📋 List PM2 Scripts
+4) 🔙 Back to Scripts Menu
+```
+
+#### **🗄️ Database Scripts**
+```
+🗄️ Database Scripts
+===================
+
+1) 📦 Install Database
+2) 🔄 Reset Database Password
+3) 💾 Create Database Backup
+4) 📊 Check Database Status
+5) 🔧 Database Manager
+6) 📋 List Database Scripts
+7) 🔙 Back to Scripts Menu
+```
+
+#### **🔐 Security Scripts**
+```
+🔐 Security Scripts
+==================
+
+1) 🔑 Enable SSH Root Login
+2) 🛡️ Setup UFW Firewall
+3) 🚫 Install Fail2Ban
+4) 🔒 Setup SSL Certificate
+5) 📋 List Security Scripts
+6) 🔙 Back to Scripts Menu
+```
+
+#### **📊 System Administration Scripts**
+```
+📊 System Administration Scripts
+================================
+
+1) 🔄 System Update
+2) 💾 System Backup
+3) 📊 System Status
+4) 🔧 PostgreSQL Remote Setup
+5) 📋 List System Scripts
+6) 🔙 Back to Scripts Menu
+```
+
+#### **🔧 Development Tools Scripts**
+```
+🔧 Development Tools Scripts
+===========================
+
+1) 📦 Install Development Stack
+2) 🐳 Docker Setup
+3) ☸️ Kubernetes Setup
+4) 📋 List Development Scripts
+5) 🔙 Back to Scripts Menu
+```
+
+### **Menu Usage Examples**
+
+#### **Quick Start with Menus**
+```bash
+# Install SetupX and launch main menu
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx menu
+
+# Launch scripts-only menu
+setupx scripts-menu
+
+# Show help
+setupx help
+```
+
+#### **Menu Navigation Flow**
+```bash
+# Main Menu → Scripts → Nginx → Domain Setup
+setupx menu
+# Select: 2) 🔧 Run Scripts
+# Select: 3) 🌐 Nginx Domain Setup (Guided)
+# Follow prompts for domain, port, SSL
+
+# Scripts Menu → Database → Install Database
+setupx scripts-menu  
+# Select: 3) 🗄️ Database Management
+# Select: 1) 📦 Install Database
+# Choose database type and follow prompts
+```
+
+#### **Guided Input Examples**
+```bash
+# Nginx Domain Setup (Guided)
+# Enter domain name: example.com
+# Enter backend port: 3000
+# Enable SSL? [y]: y
+# Command: setupx -sh nginx-domain -d example.com -p 3000 -s
+# Execute? [y]: y
+
+# PM2 Deployment (Guided)
+# Enter application name: myapp
+# Enter application port: 3000
+# Enter application directory: /var/www/myapp
+# Select environment: 1) development 2) production 3) staging
+# Command: setupx -sh pm2-deploy -n myapp -p 3000 -d /var/www/myapp -e development
+# Execute? [y]: y
+```
+
+### **Menu Features**
+- **🎯 Intuitive Navigation** - Number-based selection system
+- **🔄 Back Navigation** - Easy return to previous menus
+- **✅ Input Validation** - Error handling for invalid selections
+- **🖥️ Clean Interface** - Screen clearing for better readability
+- **⏸️ Pause Prompts** - "Press Enter to continue" for better UX
+- **📋 Command Preview** - Shows exact commands before execution
+- **🔒 Confirmation Prompts** - Safety checks before running commands
+- **🎨 Visual Indicators** - Emojis and formatting for better organization
+
 ## 🗄️ Comprehensive Database Management
 
 ### **Supported Database Systems**
