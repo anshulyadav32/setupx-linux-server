@@ -6,24 +6,56 @@ echo "🚀 SetupX Linux - One Line Installer"
 echo "===================================="
 echo ""
 
-# Check if running as root
-if [ "$EUID" -eq 0 ]; then
-    echo "❌ Please do not run this script as root"
-    echo "The script will use sudo when needed"
-    exit 1
+# Check if running as root, if not, restart with sudo
+if [ "$EUID" -ne 0 ]; then
+    echo "🔄 Restarting installer with root privileges..."
+    exec sudo "$0" "$@"
 fi
 
-# Check if jq is installed
-if ! command -v jq >/dev/null 2>&1; then
-    echo "📦 Installing jq (required for SetupX)..."
-    sudo apt update
-    sudo apt install -y jq
-fi
+# Update and upgrade system
+echo "🔄 Updating and upgrading system packages..."
+apt update
+apt upgrade -y
+apt autoremove -y
+apt autoclean
+
+# Install essential tools
+echo "📦 Installing essential development tools..."
+apt install -y curl wget git jq python3 python3-pip python3-venv build-essential
+
+# Install GitHub CLI
+echo "📦 Installing GitHub CLI..."
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+apt update
+apt install -y gh
+
+# Install NVM (Node Version Manager)
+echo "📦 Installing NVM (Node Version Manager)..."
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# Install latest LTS Node.js
+echo "📦 Installing Node.js LTS..."
+nvm install --lts
+nvm use --lts
+nvm alias default lts/*
+
+# Install PM2 globally
+echo "📦 Installing PM2..."
+npm install -g pm2
+
+# Install additional useful tools
+echo "📦 Installing additional development tools..."
+apt install -y vim nano htop tree unzip zip
 
 # Create installation directory
 INSTALL_DIR="/usr/local/bin/setupx"
 echo "📁 Creating installation directory: $INSTALL_DIR"
-sudo mkdir -p "$INSTALL_DIR"
+mkdir -p "$INSTALL_DIR"
 
 # Download and install SetupX
 echo "⬇️ Downloading SetupX..."
@@ -64,40 +96,48 @@ curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/m
 
 # Copy files to installation directory
 echo "📋 Installing SetupX..."
-sudo cp setupx.sh "$INSTALL_DIR/"
-sudo cp config.json "$INSTALL_DIR/"
-sudo cp engine.sh "$INSTALL_DIR/src/core/"
-sudo cp json-loader.sh "$INSTALL_DIR/src/core/"
-sudo cp helpers.sh "$INSTALL_DIR/src/utils/"
-sudo cp logger.sh "$INSTALL_DIR/src/utils/"
-sudo cp *.json "$INSTALL_DIR/src/config/modules/"
-sudo cp *.sh "$INSTALL_DIR/scripts/"
+cp setupx.sh "$INSTALL_DIR/"
+cp config.json "$INSTALL_DIR/"
+cp engine.sh "$INSTALL_DIR/src/core/"
+cp json-loader.sh "$INSTALL_DIR/src/core/"
+cp helpers.sh "$INSTALL_DIR/src/utils/"
+cp logger.sh "$INSTALL_DIR/src/utils/"
+cp *.json "$INSTALL_DIR/src/config/modules/"
+cp *.sh "$INSTALL_DIR/scripts/"
 
 # Make scripts executable
 echo "🔧 Setting permissions..."
-sudo chmod +x "$INSTALL_DIR/setupx.sh"
-sudo chmod +x "$INSTALL_DIR/src/core/engine.sh"
-sudo chmod +x "$INSTALL_DIR/src/core/json-loader.sh"
-sudo chmod +x "$INSTALL_DIR/src/utils/helpers.sh"
-sudo chmod +x "$INSTALL_DIR/src/utils/logger.sh"
-sudo chmod +x "$INSTALL_DIR/scripts/final-ssh-root-login.sh"
-sudo chmod +x "$INSTALL_DIR/scripts/nginx-domain.sh"
-sudo chmod +x "$INSTALL_DIR/scripts/pm2-deploy.sh"
-sudo chmod +x "$INSTALL_DIR/scripts/setcp.sh"
+chmod +x "$INSTALL_DIR/setupx.sh"
+chmod +x "$INSTALL_DIR/src/core/engine.sh"
+chmod +x "$INSTALL_DIR/src/core/json-loader.sh"
+chmod +x "$INSTALL_DIR/src/utils/helpers.sh"
+chmod +x "$INSTALL_DIR/src/utils/logger.sh"
+chmod +x "$INSTALL_DIR/scripts/final-ssh-root-login.sh"
+chmod +x "$INSTALL_DIR/scripts/nginx-domain.sh"
+chmod +x "$INSTALL_DIR/scripts/pm2-deploy.sh"
+chmod +x "$INSTALL_DIR/scripts/setcp.sh"
 
 # Create symlinks
 echo "🔗 Creating symlinks..."
-sudo rm -f /usr/local/bin/setupx
-sudo rm -f /usr/local/bin/wsx
-sudo ln -s "$INSTALL_DIR/setupx.sh" /usr/local/bin/setupx
-sudo ln -s "$INSTALL_DIR/setupx.sh" /usr/local/bin/wsx
+rm -f /usr/local/bin/setupx
+rm -f /usr/local/bin/wsx
+ln -s "$INSTALL_DIR/setupx.sh" /usr/local/bin/setupx
+ln -s "$INSTALL_DIR/setupx.sh" /usr/local/bin/wsx
 
-# Add to PATH if not already there
-if ! echo "$PATH" | grep -q "/usr/local/bin"; then
-    echo "📝 Adding to PATH..."
-    echo 'export PATH="/usr/local/bin:$PATH"' >> ~/.bashrc
-    export PATH="/usr/local/bin:$PATH"
-fi
+# Add to PATH for all users
+echo "📝 Adding to PATH for all users..."
+echo 'export PATH="/usr/local/bin:$PATH"' >> /etc/bash.bashrc
+echo 'export PATH="/usr/local/bin:$PATH"' >> /etc/profile
+
+# Add NVM to all users
+echo 'export NVM_DIR="$HOME/.nvm"' >> /etc/bash.bashrc
+echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /etc/bash.bashrc
+echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> /etc/bash.bashrc
+
+# Set up NVM for root user
+export NVM_DIR="/root/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # Clean up
 cd "$HOME"
@@ -143,6 +183,14 @@ echo "  Install Directory: $INSTALL_DIR"
 echo "  Executable: /usr/local/bin/setupx"
 echo "  Alias: /usr/local/bin/wsx"
 echo ""
+echo "🔧 Installed Tools:"
+echo "  ✅ System updated and upgraded"
+echo "  ✅ Git, Python3, jq, curl, wget"
+echo "  ✅ GitHub CLI (gh)"
+echo "  ✅ NVM with Node.js LTS"
+echo "  ✅ PM2 process manager"
+echo "  ✅ Vim, nano, htop, tree"
+echo ""
 echo "🚀 Quick Start:"
 echo "  setupx help                    # Show help"
 echo "  setupx list                    # List all modules"
@@ -156,6 +204,6 @@ echo ""
 echo "✨ SetupX is ready to use!"
 echo ""
 echo "💡 Note: If 'setupx' command is not found, run:"
-echo "  source ~/.bashrc"
+echo "  source /etc/bash.bashrc"
 echo "  or"
 echo "  export PATH=\"/usr/local/bin:\$PATH\""
