@@ -523,9 +523,13 @@ menu_run_scripts() {
         echo ""
         echo "1) 📋 List All Scripts"
         echo "2) 🚀 Run Script by Name"
-        echo "3) 🔙 Back to Main Menu"
+        echo "3) 🌐 Nginx Domain Setup (Guided)"
+        echo "4) 🚀 PM2 Deployment (Guided)"
+        echo "5) 🗄️ Database Management (Guided)"
+        echo "6) 🔐 Security Setup (Guided)"
+        echo "7) 🔙 Back to Main Menu"
         echo ""
-        read -p "Select an option (1-3): " choice
+        read -p "Select an option (1-7): " choice
         
         case $choice in
             1)
@@ -546,10 +550,22 @@ menu_run_scripts() {
                 fi
                 ;;
             3)
+                menu_nginx_domain_guided
+                ;;
+            4)
+                menu_pm2_deploy_guided
+                ;;
+            5)
+                menu_database_guided
+                ;;
+            6)
+                menu_security_guided
+                ;;
+            7)
                 return
                 ;;
             *)
-                echo "❌ Invalid option. Please select 1-3."
+                echo "❌ Invalid option. Please select 1-7."
                 sleep 2
                 ;;
         esac
@@ -627,6 +643,370 @@ menu_system_status() {
     
     echo ""
     read -p "Press Enter to continue..."
+}
+
+menu_nginx_domain_guided() {
+    clear
+    echo "🌐 Nginx Domain Setup (Guided)"
+    echo "==============================="
+    echo ""
+    echo "This will help you configure a new domain with Nginx and SSL."
+    echo ""
+    
+    # Get domain name
+    read -p "Enter domain name (e.g., example.com): " domain
+    if [ -z "$domain" ]; then
+        echo "❌ Domain name is required"
+        sleep 2
+        return
+    fi
+    
+    # Get port
+    read -p "Enter backend port (default: 3000): " port
+    port=${port:-3000}
+    
+    # Ask for SSL
+    echo ""
+    echo "Do you want to enable SSL with Let's Encrypt? (y/n)"
+    read -p "Enable SSL [y]: " ssl_choice
+    ssl_choice=${ssl_choice:-y}
+    
+    # Build command
+    local command="setupx -sh nginx-domain -d $domain -p $port"
+    if [ "$ssl_choice" = "y" ] || [ "$ssl_choice" = "Y" ]; then
+        command="$command -s"
+    fi
+    
+    echo ""
+    echo "🚀 Command to execute:"
+    echo "$command"
+    echo ""
+    read -p "Execute this command? (y/n) [y]: " execute
+    execute=${execute:-y}
+    
+    if [ "$execute" = "y" ] || [ "$execute" = "Y" ]; then
+        echo ""
+        echo "🌐 Setting up Nginx domain: $domain"
+        eval "$command"
+        read -p "Press Enter to continue..."
+    else
+        echo "❌ Command cancelled"
+        sleep 2
+    fi
+}
+
+menu_pm2_deploy_guided() {
+    clear
+    echo "🚀 PM2 Deployment (Guided)"
+    echo "=========================="
+    echo ""
+    echo "This will help you deploy an application with PM2."
+    echo ""
+    
+    # Get app name
+    read -p "Enter application name (e.g., myapp): " app_name
+    if [ -z "$app_name" ]; then
+        echo "❌ Application name is required"
+        sleep 2
+        return
+    fi
+    
+    # Get port
+    read -p "Enter application port (default: 3000): " port
+    port=${port:-3000}
+    
+    # Get directory
+    read -p "Enter application directory (default: /var/www/$app_name): " directory
+    directory=${directory:-/var/www/$app_name}
+    
+    # Get environment
+    echo ""
+    echo "Select environment:"
+    echo "1) development"
+    echo "2) production"
+    echo "3) staging"
+    read -p "Choose environment (1-3) [1]: " env_choice
+    env_choice=${env_choice:-1}
+    
+    case $env_choice in
+        1) environment="development" ;;
+        2) environment="production" ;;
+        3) environment="staging" ;;
+        *) environment="development" ;;
+    esac
+    
+    # Build command
+    local command="setupx -sh pm2-deploy -n $app_name -p $port -d $directory -e $environment"
+    
+    echo ""
+    echo "🚀 Command to execute:"
+    echo "$command"
+    echo ""
+    read -p "Execute this command? (y/n) [y]: " execute
+    execute=${execute:-y}
+    
+    if [ "$execute" = "y" ] || [ "$execute" = "Y" ]; then
+        echo ""
+        echo "🚀 Deploying application: $app_name"
+        eval "$command"
+        read -p "Press Enter to continue..."
+    else
+        echo "❌ Command cancelled"
+        sleep 2
+    fi
+}
+
+menu_database_guided() {
+    while true; do
+        clear
+        echo "🗄️ Database Management (Guided)"
+        echo "==============================="
+        echo ""
+        echo "1) 📦 Install Database"
+        echo "2) 🔄 Reset Database Password"
+        echo "3) 💾 Create Database Backup"
+        echo "4) 📊 Check Database Status"
+        echo "5) 🔙 Back to Scripts Menu"
+        echo ""
+        read -p "Select an option (1-5): " choice
+        
+        case $choice in
+            1)
+                menu_database_install_guided
+                ;;
+            2)
+                menu_database_reset_guided
+                ;;
+            3)
+                menu_database_backup_guided
+                ;;
+            4)
+                echo ""
+                echo "📊 Checking database status..."
+                invoke_script "database-status"
+                read -p "Press Enter to continue..."
+                ;;
+            5)
+                return
+                ;;
+            *)
+                echo "❌ Invalid option. Please select 1-5."
+                sleep 2
+                ;;
+        esac
+    done
+}
+
+menu_database_install_guided() {
+    clear
+    echo "📦 Install Database (Guided)"
+    echo "============================"
+    echo ""
+    echo "Available databases:"
+    echo "1) PostgreSQL"
+    echo "2) MySQL"
+    echo "3) MariaDB"
+    echo "4) MongoDB"
+    echo "5) Redis"
+    echo "6) Cassandra"
+    echo "7) Elasticsearch"
+    echo "8) Neo4j"
+    echo "9) InfluxDB"
+    echo "10) CouchDB"
+    echo "11) SQLite"
+    echo ""
+    read -p "Select database (1-11): " db_choice
+    
+    case $db_choice in
+        1) db_type="postgresql" ;;
+        2) db_type="mysql" ;;
+        3) db_type="mariadb" ;;
+        4) db_type="mongodb" ;;
+        5) db_type="redis" ;;
+        6) db_type="cassandra" ;;
+        7) db_type="elasticsearch" ;;
+        8) db_type="neo4j" ;;
+        9) db_type="influxdb" ;;
+        10) db_type="couchdb" ;;
+        11) db_type="sqlite" ;;
+        *)
+            echo "❌ Invalid selection"
+            sleep 2
+            return
+            ;;
+    esac
+    
+    echo ""
+    echo "🚀 Installing $db_type..."
+    invoke_script "database-manager" "install-$db_type"
+    read -p "Press Enter to continue..."
+}
+
+menu_database_reset_guided() {
+    clear
+    echo "🔄 Reset Database Password (Guided)"
+    echo "==================================="
+    echo ""
+    echo "Available databases:"
+    echo "1) PostgreSQL"
+    echo "2) MySQL"
+    echo "3) MariaDB"
+    echo "4) MongoDB"
+    echo "5) Redis"
+    echo ""
+    read -p "Select database (1-5): " db_choice
+    
+    case $db_choice in
+        1) db_type="postgresql" ;;
+        2) db_type="mysql" ;;
+        3) db_type="mariadb" ;;
+        4) db_type="mongodb" ;;
+        5) db_type="redis" ;;
+        *)
+            echo "❌ Invalid selection"
+            sleep 2
+            return
+            ;;
+    esac
+    
+    read -p "Enter new password (default: ${db_type}123): " new_password
+    new_password=${new_password:-${db_type}123}
+    
+    echo ""
+    echo "🔄 Resetting $db_type password..."
+    invoke_script "database-reset" "$db_type" "$new_password"
+    read -p "Press Enter to continue..."
+}
+
+menu_database_backup_guided() {
+    clear
+    echo "💾 Create Database Backup (Guided)"
+    echo "=================================="
+    echo ""
+    echo "Available databases:"
+    echo "1) PostgreSQL"
+    echo "2) MySQL"
+    echo "3) MongoDB"
+    echo ""
+    read -p "Select database (1-3): " db_choice
+    
+    case $db_choice in
+        1) db_type="postgresql" ;;
+        2) db_type="mysql" ;;
+        3) db_type="mongodb" ;;
+        *)
+            echo "❌ Invalid selection"
+            sleep 2
+            return
+            ;;
+    esac
+    
+    echo ""
+    echo "💾 Creating $db_type backup..."
+    invoke_script "database-backup" "$db_type"
+    read -p "Press Enter to continue..."
+}
+
+menu_security_guided() {
+    while true; do
+        clear
+        echo "🔐 Security Setup (Guided)"
+        echo "==========================="
+        echo ""
+        echo "1) 🔑 Enable SSH Root Login"
+        echo "2) 🛡️ Setup UFW Firewall"
+        echo "3) 🚫 Install Fail2Ban"
+        echo "4) 🔒 Setup SSL Certificate"
+        echo "5) 🔙 Back to Scripts Menu"
+        echo ""
+        read -p "Select an option (1-5): " choice
+        
+        case $choice in
+            1)
+                menu_ssh_root_guided
+                ;;
+            2)
+                echo ""
+                echo "🛡️ Setting up UFW firewall..."
+                invoke_script "system-security" "ufw"
+                read -p "Press Enter to continue..."
+                ;;
+            3)
+                echo ""
+                echo "🚫 Installing Fail2Ban..."
+                invoke_script "system-security" "fail2ban"
+                read -p "Press Enter to continue..."
+                ;;
+            4)
+                menu_ssl_guided
+                ;;
+            5)
+                return
+                ;;
+            *)
+                echo "❌ Invalid option. Please select 1-5."
+                sleep 2
+                ;;
+        esac
+    done
+}
+
+menu_ssh_root_guided() {
+    clear
+    echo "🔑 Enable SSH Root Login (Guided)"
+    echo "================================="
+    echo ""
+    read -p "Enter root password: " root_password
+    if [ -z "$root_password" ]; then
+        echo "❌ Root password is required"
+        sleep 2
+        return
+    fi
+    
+    echo ""
+    echo "🔑 Enabling SSH root login..."
+    invoke_script "final-ssh-root-login" "-p" "$root_password"
+    read -p "Press Enter to continue..."
+}
+
+menu_ssl_guided() {
+    clear
+    echo "🔒 Setup SSL Certificate (Guided)"
+    echo "================================="
+    echo ""
+    read -p "Enter domain name (e.g., example.com): " domain
+    if [ -z "$domain" ]; then
+        echo "❌ Domain name is required"
+        sleep 2
+        return
+    fi
+    
+    echo ""
+    echo "Include www subdomain? (y/n)"
+    read -p "Include www [y]: " include_www
+    include_www=${include_www:-y}
+    
+    local command="setupx -sh ssl-setup -d $domain"
+    if [ "$include_www" = "n" ] || [ "$include_www" = "N" ]; then
+        command="$command --no-www"
+    fi
+    
+    echo ""
+    echo "🔒 Command to execute:"
+    echo "$command"
+    echo ""
+    read -p "Execute this command? (y/n) [y]: " execute
+    execute=${execute:-y}
+    
+    if [ "$execute" = "y" ] || [ "$execute" = "Y" ]; then
+        echo ""
+        echo "🔒 Setting up SSL for: $domain"
+        eval "$command"
+        read -p "Press Enter to continue..."
+    else
+        echo "❌ Command cancelled"
+        sleep 2
+    fi
 }
 
 invoke_search() {
