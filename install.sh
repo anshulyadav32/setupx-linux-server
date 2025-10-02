@@ -76,14 +76,21 @@ sudo cp *.sh "$INSTALL_DIR/scripts/"
 # Make scripts executable
 echo "🔧 Setting permissions..."
 sudo chmod +x "$INSTALL_DIR/setupx.sh"
-sudo chmod +x "$INSTALL_DIR/src/core/*.sh"
-sudo chmod +x "$INSTALL_DIR/src/utils/*.sh"
-sudo chmod +x "$INSTALL_DIR/scripts/*.sh"
+sudo chmod +x "$INSTALL_DIR/src/core/engine.sh"
+sudo chmod +x "$INSTALL_DIR/src/core/json-loader.sh"
+sudo chmod +x "$INSTALL_DIR/src/utils/helpers.sh"
+sudo chmod +x "$INSTALL_DIR/src/utils/logger.sh"
+sudo chmod +x "$INSTALL_DIR/scripts/final-ssh-root-login.sh"
+sudo chmod +x "$INSTALL_DIR/scripts/nginx-domain.sh"
+sudo chmod +x "$INSTALL_DIR/scripts/pm2-deploy.sh"
+sudo chmod +x "$INSTALL_DIR/scripts/setcp.sh"
 
 # Create symlinks
 echo "🔗 Creating symlinks..."
-sudo ln -sf "$INSTALL_DIR/setupx.sh" /usr/local/bin/setupx
-sudo ln -sf "$INSTALL_DIR/setupx.sh" /usr/local/bin/wsx
+sudo rm -f /usr/local/bin/setupx
+sudo rm -f /usr/local/bin/wsx
+sudo ln -s "$INSTALL_DIR/setupx.sh" /usr/local/bin/setupx
+sudo ln -s "$INSTALL_DIR/setupx.sh" /usr/local/bin/wsx
 
 # Add to PATH if not already there
 if ! echo "$PATH" | grep -q "/usr/local/bin"; then
@@ -95,6 +102,37 @@ fi
 # Clean up
 cd "$HOME"
 rm -rf /tmp/setupx.sh /tmp/config.json /tmp/*.sh /tmp/*.json
+
+# Verify installation
+echo "🔍 Verifying installation..."
+if [ -f "/usr/local/bin/setupx" ] && [ -x "/usr/local/bin/setupx" ]; then
+    echo "✅ SetupX executable created successfully"
+else
+    echo "❌ SetupX executable not found or not executable"
+    exit 1
+fi
+
+if [ -f "$INSTALL_DIR/setupx.sh" ]; then
+    echo "✅ Main script installed successfully"
+else
+    echo "❌ Main script not found"
+    exit 1
+fi
+
+if [ -f "$INSTALL_DIR/config.json" ]; then
+    echo "✅ Configuration file installed successfully"
+else
+    echo "❌ Configuration file not found"
+    exit 1
+fi
+
+# Test the installation
+echo "🧪 Testing SetupX..."
+if /usr/local/bin/setupx --help >/dev/null 2>&1; then
+    echo "✅ SetupX is working correctly"
+else
+    echo "⚠️ SetupX installed but may have issues"
+fi
 
 echo ""
 echo "🎉 SetupX Linux installed successfully!"
@@ -116,3 +154,8 @@ echo "  https://github.com/anshulyadav32/setupx-linux-server"
 echo "  https://anshulyadav32.github.io/setupx-linux-server/"
 echo ""
 echo "✨ SetupX is ready to use!"
+echo ""
+echo "💡 Note: If 'setupx' command is not found, run:"
+echo "  source ~/.bashrc"
+echo "  or"
+echo "  export PATH=\"/usr/local/bin:\$PATH\""
