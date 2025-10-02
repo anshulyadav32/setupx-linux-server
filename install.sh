@@ -16,6 +16,22 @@ apt upgrade -y
 apt autoremove -y
 apt autoclean
 
+# Fix PostgreSQL key deprecation warning
+echo "🔧 Fixing PostgreSQL key deprecation..."
+if [ -f "/etc/apt/trusted.gpg" ]; then
+    # Convert legacy key to new format
+    apt-key export 7FCC7D46ACCC4CF8 | gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg 2>/dev/null || true
+fi
+
+# Handle any remaining upgradable packages
+echo "🔧 Checking for upgradable packages..."
+UPGRADABLE=$(apt list --upgradable 2>/dev/null | grep -c "upgradable" || echo "0")
+if [ "$UPGRADABLE" -gt 0 ]; then
+    echo "📦 Upgrading remaining packages..."
+    apt upgrade -y
+    apt autoremove -y
+fi
+
 # Install essential tools
 echo "📦 Installing essential development tools..."
 apt install -y curl wget git jq python3 python3-pip python3-venv build-essential
@@ -25,7 +41,10 @@ echo "📦 Installing GitHub CLI..."
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
 chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-apt update
+
+# Update package lists (suppress PostgreSQL warning)
+echo "🔄 Updating package lists..."
+apt update 2>/dev/null || apt update
 apt install -y gh
 
 # Install NVM (Node Version Manager)
