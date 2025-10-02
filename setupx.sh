@@ -6,6 +6,14 @@
 # Get the directory of this script
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# If this is a symlink, get the actual installation directory
+if [ -L "${BASH_SOURCE[0]}" ]; then
+    # Get the target of the symlink
+    TARGET=$(readlink "${BASH_SOURCE[0]}")
+    # Get the directory of the target
+    SCRIPT_DIR="$(cd "$(dirname "$TARGET")" && pwd)"
+fi
+
 # Import core modules
 source "$SCRIPT_DIR/src/utils/logger.sh"
 source "$SCRIPT_DIR/src/utils/helpers.sh"
