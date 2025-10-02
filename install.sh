@@ -28,22 +28,32 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githu
 apt update
 apt install -y gh
 
-# Install NVM (Node Version Manager)
-echo "📦 Installing NVM (Node Version Manager)..."
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    # Install NVM (Node Version Manager)
+    echo "📦 Installing NVM (Node Version Manager)..."
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+    export NVM_DIR="/root/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-# Install latest LTS Node.js
-echo "📦 Installing Node.js LTS..."
-nvm install --lts
-nvm use --lts
-nvm alias default lts/*
+    # Install latest LTS Node.js
+    echo "📦 Installing Node.js LTS..."
+    if command -v nvm >/dev/null 2>&1; then
+        nvm install --lts
+        nvm use --lts
+        nvm alias default lts/*
+    else
+        echo "⚠️ NVM not available, installing Node.js via apt..."
+        curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
+        apt install -y nodejs
+    fi
 
-# Install PM2 globally
-echo "📦 Installing PM2..."
-npm install -g pm2
+    # Install PM2 globally
+    echo "📦 Installing PM2..."
+    if command -v npm >/dev/null 2>&1; then
+        npm install -g pm2
+    else
+        echo "⚠️ NPM not available, skipping PM2 installation"
+    fi
 
 # Install additional useful tools
 echo "📦 Installing additional development tools..."
@@ -128,15 +138,15 @@ echo "📝 Adding to PATH for all users..."
 echo 'export PATH="/usr/local/bin:$PATH"' >> /etc/bash.bashrc
 echo 'export PATH="/usr/local/bin:$PATH"' >> /etc/profile
 
-# Add NVM to all users
-echo 'export NVM_DIR="$HOME/.nvm"' >> /etc/bash.bashrc
-echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /etc/bash.bashrc
-echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> /etc/bash.bashrc
+    # Add NVM to all users
+    echo 'export NVM_DIR="/usr/local/nvm"' >> /etc/bash.bashrc
+    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> /etc/bash.bashrc
+    echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> /etc/bash.bashrc
 
-# Set up NVM for root user
-export NVM_DIR="/root/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    # Set up NVM for root user
+    export NVM_DIR="/usr/local/nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # Refresh environment
 export PATH="/usr/local/bin:$PATH"
@@ -145,36 +155,49 @@ export PATH="/usr/local/bin:$PATH"
 cd "$HOME"
 rm -rf /tmp/setupx.sh /tmp/config.json /tmp/*.sh /tmp/*.json
 
-# Verify installation
-echo "🔍 Verifying installation..."
-if [ -f "/usr/local/bin/setupx" ] && [ -x "/usr/local/bin/setupx" ]; then
-    echo "✅ SetupX executable created successfully"
-else
-    echo "❌ SetupX executable not found or not executable"
-    exit 1
-fi
+    # Verify installation
+    echo "🔍 Verifying installation..."
+    
+    # Check if symlink exists and is executable
+    if [ -L "/usr/local/bin/setupx" ] && [ -x "/usr/local/bin/setupx" ]; then
+        echo "✅ SetupX symlink created successfully"
+    elif [ -f "/usr/local/bin/setupx" ] && [ -x "/usr/local/bin/setupx" ]; then
+        echo "✅ SetupX executable created successfully"
+    else
+        echo "❌ SetupX executable not found or not executable"
+        echo "Debug info:"
+        ls -la /usr/local/bin/setupx 2>/dev/null || echo "File does not exist"
+        echo "Attempting to fix..."
+        chmod +x "$INSTALL_DIR/setupx.sh"
+        ln -sf "$INSTALL_DIR/setupx.sh" /usr/local/bin/setupx
+        chmod +x /usr/local/bin/setupx
+    fi
 
-if [ -f "$INSTALL_DIR/setupx.sh" ]; then
-    echo "✅ Main script installed successfully"
-else
-    echo "❌ Main script not found"
-    exit 1
-fi
+    if [ -f "$INSTALL_DIR/setupx.sh" ]; then
+        echo "✅ Main script installed successfully"
+    else
+        echo "❌ Main script not found"
+        exit 1
+    fi
 
-if [ -f "$INSTALL_DIR/config.json" ]; then
-    echo "✅ Configuration file installed successfully"
-else
-    echo "❌ Configuration file not found"
-    exit 1
-fi
+    if [ -f "$INSTALL_DIR/config.json" ]; then
+        echo "✅ Configuration file installed successfully"
+    else
+        echo "❌ Configuration file not found"
+        exit 1
+    fi
 
-# Test the installation
-echo "🧪 Testing SetupX..."
-if /usr/local/bin/setupx --help >/dev/null 2>&1; then
-    echo "✅ SetupX is working correctly"
-else
-    echo "⚠️ SetupX installed but may have issues"
-fi
+    # Test the installation
+    echo "🧪 Testing SetupX..."
+    if /usr/local/bin/setupx --help >/dev/null 2>&1; then
+        echo "✅ SetupX is working correctly"
+    else
+        echo "⚠️ SetupX installed but may have issues"
+        echo "Debug info:"
+        echo "Symlink target: $(readlink /usr/local/bin/setupx 2>/dev/null || echo 'Not a symlink')"
+        echo "File exists: $([ -f /usr/local/bin/setupx ] && echo 'Yes' || echo 'No')"
+        echo "File executable: $([ -x /usr/local/bin/setupx ] && echo 'Yes' || echo 'No')"
+    fi
 
 echo ""
 echo "🎉 SetupX Linux installed successfully!"
