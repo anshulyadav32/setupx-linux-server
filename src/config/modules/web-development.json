@@ -176,6 +176,23 @@
         "test": "sudo systemctl status nginx"
       }
     },
+    "apache": {
+      "name": "apache",
+      "displayName": "Apache HTTP Server",
+      "description": "Popular open source web server with .htaccess support",
+      "installMethod": "apt",
+      "website": "https://httpd.apache.org/",
+      "status": "working",
+      "category": "web-development",
+      "commands": {
+        "install": "sudo apt update && sudo apt install -y apache2",
+        "remove": "sudo apt remove -y apache2",
+        "update": "sudo apt update && sudo apt upgrade -y apache2",
+        "check": "command -v apache2 >/dev/null 2>&1",
+        "verify": "apache2 -v",
+        "test": "sudo systemctl status apache2"
+      }
+    },
     "ssl-certbot": {
       "name": "ssl-certbot",
       "displayName": "SSL Certbot",

@@ -122,6 +122,36 @@
       "usage": "setupx -sh nginx-domain -d <domain> -p <port> [-s]"
     },
     {
+      "name": "apache-domain",
+      "displayName": "Apache Domain Setup",
+      "description": "Configure Apache domain with SSL support",
+      "category": "web-server",
+      "commands": {
+        "install": "bash scripts/apache-domain.sh",
+        "check": "apache2ctl configtest",
+        "test": "systemctl is-active apache2"
+      },
+      "parameters": {
+        "domain": {
+          "type": "string",
+          "description": "Domain name to configure",
+          "required": true
+        },
+        "port": {
+          "type": "number",
+          "description": "Backend application port",
+          "required": true
+        },
+        "ssl": {
+          "type": "boolean",
+          "description": "Enable SSL with Let's Encrypt",
+          "default": false,
+          "required": false
+        }
+      },
+      "usage": "setupx -sh apache-domain -d <domain> -p <port> [-s]"
+    },
+    {
       "name": "pm2-deploy",
       "displayName": "PM2 Deployment",
       "description": "Deploy application with PM2 process manager",

@@ -697,6 +697,56 @@ menu_nginx_domain_guided() {
     fi
 }
 
+menu_apache_domain_guided() {
+    clear
+    echo "🚀 Apache Domain Setup (Guided)"
+    echo "==============================="
+    echo ""
+    echo "This will help you configure a new domain with Apache and SSL."
+    echo ""
+    
+    # Get domain name
+    read -p "Enter domain name (e.g., example.com): " domain
+    if [ -z "$domain" ]; then
+        echo "❌ Domain name is required"
+        sleep 2
+        return
+    fi
+    
+    # Get port
+    read -p "Enter backend port (default: 3000): " port
+    port=${port:-3000}
+    
+    # Ask for SSL
+    echo ""
+    echo "Do you want to enable SSL with Let's Encrypt? (y/n)"
+    read -p "Enable SSL [y]: " ssl_choice
+    ssl_choice=${ssl_choice:-y}
+    
+    # Build command
+    local command="setupx -sh apache-domain -d $domain -p $port"
+    if [ "$ssl_choice" = "y" ] || [ "$ssl_choice" = "Y" ]; then
+        command="$command -s"
+    fi
+    
+    echo ""
+    echo "🚀 Command to execute:"
+    echo "$command"
+    echo ""
+    read -p "Execute this command? (y/n) [y]: " execute
+    execute=${execute:-y}
+    
+    if [ "$execute" = "y" ] || [ "$execute" = "Y" ]; then
+        echo ""
+        echo "🚀 Setting up Apache domain: $domain"
+        eval "$command"
+        read -p "Press Enter to continue..."
+    else
+        echo "❌ Command cancelled"
+        sleep 2
+    fi
+}
+
 menu_pm2_deploy_guided() {
     clear
     echo "🚀 PM2 Deployment (Guided)"
@@ -1067,35 +1117,40 @@ invoke_scripts_menu() {
 menu_nginx_scripts() {
     while true; do
         clear
-        echo "🌐 Nginx Scripts"
-        echo "================"
+        echo "🌐 Web Server Scripts"
+        echo "===================="
         echo ""
         echo "1) 🌐 Setup Nginx Domain (Guided)"
-        echo "2) 🔒 Setup SSL Certificate (Guided)"
-        echo "3) 📋 List Nginx Scripts"
-        echo "4) 🔙 Back to Scripts Menu"
+        echo "2) 🚀 Setup Apache Domain (Guided)"
+        echo "3) 🔒 Setup SSL Certificate (Guided)"
+        echo "4) 📋 List Web Server Scripts"
+        echo "5) 🔙 Back to Scripts Menu"
         echo ""
-        read -p "Select an option (1-4): " choice
+        read -p "Select an option (1-5): " choice
         
         case $choice in
             1)
                 menu_nginx_domain_guided
                 ;;
             2)
-                menu_ssl_guided
+                menu_apache_domain_guided
                 ;;
             3)
+                menu_ssl_guided
+                ;;
+            4)
                 echo ""
-                echo "🌐 Available Nginx Scripts:"
+                echo "🌐 Available Web Server Scripts:"
                 echo "  - nginx-domain: Configure Nginx domain with SSL"
+                echo "  - apache-domain: Configure Apache domain with SSL"
                 echo "  - ssl-setup: Setup SSL certificates with Let's Encrypt"
                 read -p "Press Enter to continue..."
                 ;;
-            4)
+            5)
                 return
                 ;;
             *)
-                echo "❌ Invalid option. Please select 1-4."
+                echo "❌ Invalid option. Please select 1-5."
                 sleep 2
                 ;;
         esac
@@ -1591,18 +1646,27 @@ invoke_script() {
             fi
             ;;
         "nginx-domain")
-            if [ -f "$SCRIPT_DIR/nginx-domain.sh" ]; then
-                chmod +x "$SCRIPT_DIR/nginx-domain.sh"
-                "$SCRIPT_DIR/nginx-domain.sh" $script_args
+            if [ -f "$SCRIPT_DIR/scripts/nginx-domain.sh" ]; then
+                chmod +x "$SCRIPT_DIR/scripts/nginx-domain.sh"
+                "$SCRIPT_DIR/scripts/nginx-domain.sh" $script_args
             else
                 echo "Error: nginx-domain.sh script not found"
                 return 1
             fi
             ;;
+        "apache-domain")
+            if [ -f "$SCRIPT_DIR/scripts/apache-domain.sh" ]; then
+                chmod +x "$SCRIPT_DIR/scripts/apache-domain.sh"
+                "$SCRIPT_DIR/scripts/apache-domain.sh" $script_args
+            else
+                echo "Error: apache-domain.sh script not found"
+                return 1
+            fi
+            ;;
         "pm2-deploy")
-            if [ -f "$SCRIPT_DIR/pm2-deploy.sh" ]; then
-                chmod +x "$SCRIPT_DIR/pm2-deploy.sh"
-                "$SCRIPT_DIR/pm2-deploy.sh" $script_args
+            if [ -f "$SCRIPT_DIR/scripts/pm2-deploy.sh" ]; then
+                chmod +x "$SCRIPT_DIR/scripts/pm2-deploy.sh"
+                "$SCRIPT_DIR/scripts/pm2-deploy.sh" $script_args
             else
                 echo "Error: pm2-deploy.sh script not found"
                 return 1
