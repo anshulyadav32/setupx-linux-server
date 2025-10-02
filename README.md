@@ -119,6 +119,30 @@ setupx -sh backup-system
 - **devops**: Docker, Kubernetes, CI/CD tools
 - **scripts**: Database management, Nginx setup, PM2 deployment
 
+## 🎯 Interactive Menu System
+
+### **Launch Interactive Menu**
+```bash
+# Start the interactive menu system
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx menu
+```
+
+### **Menu Features**
+- **📦 Install Components** - Install by module or individual components
+- **🔧 Run Scripts** - Execute scripts with interactive selection
+- **📋 List Modules** - Browse and explore available modules
+- **🔍 Search Components** - Find specific components
+- **📊 System Status** - Check system and SetupX status
+- **❓ Help** - Access help documentation
+- **🚪 Exit** - Clean exit from menu
+
+### **Menu Navigation**
+- **Number Selection** - Choose options by entering numbers (1-7)
+- **Back Navigation** - Return to previous menus with back options
+- **Input Validation** - Invalid selections show error messages
+- **Clear Screen** - Clean interface with screen clearing
+- **Press Enter** - Continue prompts for better user experience
+
 ## 📋 All Available Scripts
 
 ### **View All Scripts**
@@ -128,6 +152,9 @@ curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/m
 
 # Show script help
 curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh help
+
+# Interactive menu system
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx menu
 ```
 
 ### **Available Scripts Overview**

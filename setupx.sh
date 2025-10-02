@@ -72,6 +72,7 @@ show_help() {
     echo "    install-module <module>       Install all components in a module"
     echo "    list-module <module>          List components in a specific module"
     echo "    scripts                       List all available scripts"
+    echo "    menu                          Interactive menu system"
     echo "    search <query>                Search for components"
     echo "    -sh <script> [args]           Run a script with arguments"
     echo "    version                       Show SetupX version"
@@ -86,6 +87,7 @@ show_help() {
     echo "    setupx install-module web-development  # Install all web dev tools"
     echo "    setupx list-module package-managers    # List package managers"
     echo "    setupx scripts                # List all available scripts"
+    echo "    setupx menu                   # Interactive menu system"
     echo "    setupx search docker          # Search for Docker component"
     echo "    setupx -sh gcprootlogin -p rootpass ubuntupass  # Enable GCP root login"
     echo "    setupx -sh system-update    # Update system packages"
@@ -375,6 +377,258 @@ invoke_list_scripts() {
     echo "Use 'setupx -sh' to see available scripts with descriptions"
 }
 
+invoke_interactive_menu() {
+    while true; do
+        clear
+        show_banner
+        echo ""
+        echo "🚀 SetupX Interactive Menu"
+        echo "=========================="
+        echo ""
+        echo "1) 📦 Install Components"
+        echo "2) 🔧 Run Scripts"
+        echo "3) 📋 List Modules"
+        echo "4) 🔍 Search Components"
+        echo "5) 📊 System Status"
+        echo "6) ❓ Help"
+        echo "7) 🚪 Exit"
+        echo ""
+        read -p "Select an option (1-7): " choice
+        
+        case $choice in
+            1)
+                menu_install_components
+                ;;
+            2)
+                menu_run_scripts
+                ;;
+            3)
+                menu_list_modules
+                ;;
+            4)
+                menu_search_components
+                ;;
+            5)
+                menu_system_status
+                ;;
+            6)
+                show_help
+                read -p "Press Enter to continue..."
+                ;;
+            7)
+                echo ""
+                echo "👋 Thank you for using SetupX!"
+                echo "Run 'setupx help' for command-line usage"
+                exit 0
+                ;;
+            *)
+                echo "❌ Invalid option. Please select 1-7."
+                sleep 2
+                ;;
+        esac
+    done
+}
+
+menu_install_components() {
+    while true; do
+        clear
+        echo "📦 Install Components"
+        echo "===================="
+        echo ""
+        echo "1) 🏗️  Install by Module"
+        echo "2) 🔧 Install Individual Component"
+        echo "3) 📋 List Available Modules"
+        echo "4) 🔙 Back to Main Menu"
+        echo ""
+        read -p "Select an option (1-4): " choice
+        
+        case $choice in
+            1)
+                menu_install_by_module
+                ;;
+            2)
+                menu_install_individual
+                ;;
+            3)
+                show_list
+                read -p "Press Enter to continue..."
+                ;;
+            4)
+                return
+                ;;
+            *)
+                echo "❌ Invalid option. Please select 1-4."
+                sleep 2
+                ;;
+        esac
+    done
+}
+
+menu_install_by_module() {
+    echo ""
+    echo "Available Modules:"
+    echo "=================="
+    
+    local modules=$(get_all_module_configs)
+    local module_count=$(echo "$modules" | jq 'length')
+    local i=1
+    
+    echo "$modules" | jq -r '.[] | "\(.name)|\(.displayName)|\(.description)"' | while IFS='|' read -r name display_name description; do
+        echo "$i) $display_name"
+        echo "   $description"
+        echo ""
+        i=$((i+1))
+    done
+    
+    echo "$((module_count + 1))) 🔙 Back"
+    echo ""
+    read -p "Select module to install (1-$((module_count + 1))): " choice
+    
+    if [ "$choice" -eq "$((module_count + 1))" ]; then
+        return
+    fi
+    
+    local selected_module=$(echo "$modules" | jq -r ".[$((choice-1))].name" 2>/dev/null)
+    if [ -n "$selected_module" ] && [ "$selected_module" != "null" ]; then
+        echo ""
+        echo "🚀 Installing module: $selected_module"
+        invoke_install_module "$selected_module"
+        read -p "Press Enter to continue..."
+    else
+        echo "❌ Invalid selection"
+        sleep 2
+    fi
+}
+
+menu_install_individual() {
+    echo ""
+    read -p "Enter component name to install: " component_name
+    
+    if [ -n "$component_name" ]; then
+        echo ""
+        echo "🚀 Installing component: $component_name"
+        invoke_install "$component_name"
+        read -p "Press Enter to continue..."
+    else
+        echo "❌ Component name required"
+        sleep 2
+    fi
+}
+
+menu_run_scripts() {
+    while true; do
+        clear
+        echo "🔧 Run Scripts"
+        echo "=============="
+        echo ""
+        echo "1) 📋 List All Scripts"
+        echo "2) 🚀 Run Script by Name"
+        echo "3) 🔙 Back to Main Menu"
+        echo ""
+        read -p "Select an option (1-3): " choice
+        
+        case $choice in
+            1)
+                invoke_list_scripts
+                read -p "Press Enter to continue..."
+                ;;
+            2)
+                echo ""
+                read -p "Enter script name: " script_name
+                if [ -n "$script_name" ]; then
+                    echo ""
+                    echo "🚀 Running script: $script_name"
+                    invoke_script "$script_name"
+                    read -p "Press Enter to continue..."
+                else
+                    echo "❌ Script name required"
+                    sleep 2
+                fi
+                ;;
+            3)
+                return
+                ;;
+            *)
+                echo "❌ Invalid option. Please select 1-3."
+                sleep 2
+                ;;
+        esac
+    done
+}
+
+menu_list_modules() {
+    clear
+    show_list
+    echo ""
+    read -p "Enter module name to see details (or press Enter to go back): " module_name
+    
+    if [ -n "$module_name" ]; then
+        invoke_list_module "$module_name"
+        read -p "Press Enter to continue..."
+    fi
+}
+
+menu_search_components() {
+    echo ""
+    read -p "Enter search query: " query
+    
+    if [ -n "$query" ]; then
+        invoke_search "$query"
+        read -p "Press Enter to continue..."
+    else
+        echo "❌ Search query required"
+        sleep 2
+    fi
+}
+
+menu_system_status() {
+    clear
+    echo "📊 System Status"
+    echo "================"
+    echo ""
+    
+    # Check if running as root
+    if [ "$EUID" -eq 0 ]; then
+        echo "✅ Running as root"
+    else
+        echo "⚠️  Not running as root (some operations may require sudo)"
+    fi
+    
+    # Check essential tools
+    echo ""
+    echo "🔧 Essential Tools:"
+    for tool in curl wget git jq python3; do
+        if command -v "$tool" >/dev/null 2>&1; then
+            echo "  ✅ $tool"
+        else
+            echo "  ❌ $tool"
+        fi
+    done
+    
+    # Check SetupX installation
+    echo ""
+    echo "📦 SetupX Status:"
+    if [ -f "$SCRIPT_DIR/config.json" ]; then
+        echo "  ✅ Configuration loaded"
+    else
+        echo "  ❌ Configuration not found"
+    fi
+    
+    if [ -f "$SCRIPT_DIR/setupx.sh" ]; then
+        echo "  ✅ Main script found"
+    else
+        echo "  ❌ Main script not found"
+    fi
+    
+    # Check modules
+    local modules=$(get_all_module_configs)
+    local module_count=$(echo "$modules" | jq 'length' 2>/dev/null || echo "0")
+    echo "  📋 Modules available: $module_count"
+    
+    echo ""
+    read -p "Press Enter to continue..."
+}
+
 invoke_search() {
     local query="$1"
     
@@ -551,6 +805,9 @@ case "$1" in
         ;;
     "scripts")
         invoke_list_scripts
+        ;;
+    "menu")
+        invoke_interactive_menu
         ;;
     "search")
         invoke_search "$2"
