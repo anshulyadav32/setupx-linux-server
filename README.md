@@ -8,6 +8,7 @@ For complete documentation, please see: [docs/README.md](docs/README.md)
 
 ## 🚀 Quick Start
 
+### Linux/Ubuntu/Debian:
 ```bash
 # One-line installation
 curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash
@@ -17,6 +18,18 @@ setupx menu
 
 # Launch scripts menu
 setupx scripts-menu
+```
+
+### Windows with WSL (Windows Subsystem for Linux):
+```bash
+# Run directly with WSL
+wsl bash setupx.sh help                    # Show help
+wsl bash setupx.sh list                    # List modules
+wsl bash setupx.sh scripts                 # List scripts
+wsl bash setupx.sh menu                     # Interactive menu
+wsl bash setupx.sh scripts-menu             # Scripts menu
+wsl bash setupx.sh install-module web-development  # Install web dev tools
+wsl bash setupx.sh -sh nginx-domain -d example.com -p 3000  # Setup domain
 ```
 
 ## 🌟 Key Features
@@ -44,6 +57,7 @@ setupx -sh <script> [args]     # Run script with arguments
 
 ## 🎯 Quick Examples
 
+### Linux/Ubuntu/Debian:
 ```bash
 # Install web development stack
 setupx install-module web-development
@@ -59,6 +73,24 @@ setupx -sh pm2-deploy -n myapp -p 3000 -d /var/www/myapp
 
 # Reset database password
 setupx -sh setcp -p postgresql newpass123
+```
+
+### Windows with WSL:
+```bash
+# Install web development stack
+wsl bash setupx.sh install-module web-development
+
+# Setup Nginx domain with SSL
+wsl bash setupx.sh -sh nginx-domain -d example.com -p 3000 -s
+
+# Setup Apache domain with SSL
+wsl bash setupx.sh -sh apache-domain -d example.com -p 3000 -s
+
+# Deploy application with PM2
+wsl bash setupx.sh -sh pm2-deploy -n myapp -p 3000 -d /var/www/myapp
+
+# Reset database password
+wsl bash setupx.sh -sh setcp -p postgresql newpass123
 ```
 
 ## 📖 Complete Documentation
