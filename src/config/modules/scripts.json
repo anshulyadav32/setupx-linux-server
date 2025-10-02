@@ -419,6 +419,94 @@
         }
       },
       "usage": "setupx -sh postgres-remote [-p <port>] [-i <allowed_ips>]"
+    },
+    {
+      "name": "database-manager",
+      "displayName": "Database Manager",
+      "description": "Comprehensive database management for PostgreSQL, MySQL, MongoDB, Redis, and more",
+      "category": "database",
+      "commands": {
+        "install": "bash scripts/database-manager.sh",
+        "check": "systemctl is-active postgresql mysql mongod redis-server",
+        "test": "psql --version && mysql --version && mongod --version"
+      },
+      "parameters": {
+        "action": {
+          "type": "string",
+          "description": "Database action (install-postgresql, install-mysql, install-mongodb, etc.)",
+          "required": true
+        },
+        "password": {
+          "type": "string",
+          "description": "Database password",
+          "default": "password123",
+          "required": false
+        }
+      },
+      "usage": "setupx -sh database-manager <action> [password]"
+    },
+    {
+      "name": "database-reset",
+      "displayName": "Database Reset",
+      "description": "Reset passwords and configurations for all database systems",
+      "category": "database",
+      "commands": {
+        "install": "bash scripts/database-reset.sh",
+        "check": "systemctl is-active postgresql mysql mongod redis-server",
+        "test": "psql --version && mysql --version"
+      },
+      "parameters": {
+        "database": {
+          "type": "string",
+          "description": "Database type (postgresql, mysql, mariadb, mongodb, redis)",
+          "required": true
+        },
+        "password": {
+          "type": "string",
+          "description": "New password for the database",
+          "default": "newpass123",
+          "required": false
+        }
+      },
+      "usage": "setupx -sh database-reset <database> [password]"
+    },
+    {
+      "name": "database-backup",
+      "displayName": "Database Backup",
+      "description": "Create backups for all database systems",
+      "category": "database",
+      "commands": {
+        "install": "bash scripts/database-manager.sh backup",
+        "check": "ls -la /var/backups/databases/",
+        "test": "pg_dump --version && mysqldump --version"
+      },
+      "parameters": {
+        "database": {
+          "type": "string",
+          "description": "Database type to backup (postgresql, mysql, mongodb)",
+          "required": true
+        },
+        "backup_dir": {
+          "type": "string",
+          "description": "Backup directory path",
+          "default": "/var/backups/databases",
+          "required": false
+        }
+      },
+      "usage": "setupx -sh database-backup <database> [backup_dir]"
+    },
+    {
+      "name": "database-status",
+      "displayName": "Database Status",
+      "description": "Check status of all database systems",
+      "category": "database",
+      "commands": {
+        "install": "bash scripts/database-manager.sh status",
+        "check": "systemctl is-active postgresql mysql mongod redis-server",
+        "test": "psql --version && mysql --version"
+      },
+      "parameters": {},
+      "usage": "setupx -sh database-status"
     }
   ]
 }

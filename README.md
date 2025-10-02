@@ -143,6 +143,36 @@ curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/m
 - **Clear Screen** - Clean interface with screen clearing
 - **Press Enter** - Continue prompts for better user experience
 
+## 🗄️ Comprehensive Database Management
+
+### **Supported Database Systems**
+Based on [Anshul Yadav's GitHub profile](https://github.com/anshulyadav32), SetupX supports all major database technologies:
+
+#### **Relational Databases:**
+- **PostgreSQL** - Advanced open-source relational database
+- **MySQL** - Popular open-source RDBMS
+- **MariaDB** - MySQL fork with enhanced features
+- **SQLite** - Lightweight, serverless SQL database
+
+#### **NoSQL Databases:**
+- **MongoDB** - Document-oriented NoSQL database
+- **Redis** - In-memory data structure store
+- **Cassandra** - Distributed NoSQL database
+- **CouchDB** - Document-oriented NoSQL database
+
+#### **Specialized Databases:**
+- **Elasticsearch** - Distributed search and analytics engine
+- **InfluxDB** - Time series database for monitoring
+- **Neo4j** - Graph database management system
+
+### **Database Management Features:**
+- ✅ **One-Command Installation** - Install any database with a single command
+- ✅ **Password Management** - Reset and configure database passwords
+- ✅ **Backup & Recovery** - Create and restore database backups
+- ✅ **Status Monitoring** - Check database health and status
+- ✅ **Remote Configuration** - Configure databases for remote access
+- ✅ **Management Tools** - Install pgAdmin, MySQL Workbench, DBeaver, phpMyAdmin
+
 ## 📋 All Available Scripts
 
 ### **View All Scripts**
@@ -174,6 +204,10 @@ curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/m
 | `deploy-node-git` | Deploy Node.js app from Git | `setupx -sh deploy-node-git -w <web> -a <app> -g <git> [-p <port>]` |
 | `ssl-setup` | Setup SSL certificates | `setupx -sh ssl-setup -d <domain> [--no-www]` |
 | `postgres-remote` | Configure PostgreSQL for remote access | `setupx -sh postgres-remote [-p <port>] [-i <ips>]` |
+| `database-manager` | Comprehensive database management | `setupx -sh database-manager <action> [password]` |
+| `database-reset` | Reset database passwords and configurations | `setupx -sh database-reset <database> [password]` |
+| `database-backup` | Create database backups | `setupx -sh database-backup <database> [backup_dir]` |
+| `database-status` | Check database system status | `setupx -sh database-status` |
 
 ## ⚡ One-Liner Component Installation
 
@@ -260,17 +294,71 @@ curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/m
 
 ### **Database Management Scripts**
 ```bash
+# Install PostgreSQL
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-manager install-postgresql
+
+# Install MySQL
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-manager install-mysql
+
+# Install MongoDB
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-manager install-mongodb
+
+# Install Redis
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-manager install-redis
+
+# Install Cassandra
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-manager install-cassandra
+
+# Install Elasticsearch
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-manager install-elasticsearch
+
+# Install Neo4j
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-manager install-neo4j
+
+# Install InfluxDB
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-manager install-influxdb
+
+# Install CouchDB
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-manager install-couchdb
+
+# Install SQLite
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-manager install-sqlite
+
+# Install database management tools
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-manager install-tools
+```
+
+### **Database Reset & Configuration**
+```bash
 # Reset PostgreSQL password
-curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh setcp -p postgresql newpass123
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-reset postgresql newpass123
 
 # Reset MySQL password
-curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh reset-mysql -p mysql123
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-reset mysql mysql123
 
 # Reset MongoDB password
-curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh reset-mongodb -p mongodb123
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-reset mongodb mongodb123
 
 # Reset MariaDB password
-curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh reset-mariadb -p mariadb123
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-reset mariadb mariadb123
+
+# Reset Redis password
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-reset redis redis123
+```
+
+### **Database Backup & Status**
+```bash
+# Create PostgreSQL backup
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-backup postgresql
+
+# Create MySQL backup
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-backup mysql
+
+# Create MongoDB backup
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-backup mongodb
+
+# Check database status
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh database-status
 ```
 
 ### **Web Server & Domain Setup**

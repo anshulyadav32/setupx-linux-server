@@ -1,0 +1,194 @@
+{
+  "name": "database-management",
+  "displayName": "Database Management",
+  "description": "Comprehensive database management tools for PostgreSQL, MySQL, MongoDB, Redis, and more",
+  "version": "1.0.0",
+  "components": {
+    "postgresql": {
+      "displayName": "PostgreSQL Database",
+      "description": "Advanced open-source relational database system",
+      "category": "database",
+      "commands": {
+        "install": "apt update && apt install -y postgresql postgresql-contrib",
+        "start": "systemctl start postgresql",
+        "stop": "systemctl stop postgresql",
+        "restart": "systemctl restart postgresql",
+        "status": "systemctl status postgresql",
+        "check": "systemctl is-active postgresql",
+        "test": "psql --version"
+      },
+      "parameters": {
+        "version": {
+          "type": "string",
+          "description": "PostgreSQL version to install",
+          "default": "latest",
+          "required": false
+        }
+      }
+    },
+    "mysql": {
+      "displayName": "MySQL Database",
+      "description": "Popular open-source relational database management system",
+      "category": "database",
+      "commands": {
+        "install": "apt update && apt install -y mysql-server mysql-client",
+        "start": "systemctl start mysql",
+        "stop": "systemctl stop mysql",
+        "restart": "systemctl restart mysql",
+        "status": "systemctl status mysql",
+        "check": "systemctl is-active mysql",
+        "test": "mysql --version"
+      },
+      "parameters": {
+        "version": {
+          "type": "string",
+          "description": "MySQL version to install",
+          "default": "latest",
+          "required": false
+        }
+      }
+    },
+    "mariadb": {
+      "displayName": "MariaDB Database",
+      "description": "Open-source relational database, MySQL fork",
+      "category": "database",
+      "commands": {
+        "install": "apt update && apt install -y mariadb-server mariadb-client",
+        "start": "systemctl start mariadb",
+        "stop": "systemctl stop mariadb",
+        "restart": "systemctl restart mariadb",
+        "status": "systemctl status mariadb",
+        "check": "systemctl is-active mariadb",
+        "test": "mariadb --version"
+      }
+    },
+    "mongodb": {
+      "displayName": "MongoDB Database",
+      "description": "NoSQL document database for modern applications",
+      "category": "database",
+      "commands": {
+        "install": "curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | gpg --dearmor -o /usr/share/keyrings/mongodb-server-7.0.gpg && echo 'deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse' | tee /etc/apt/sources.list.d/mongodb-org-7.0.list && apt update && apt install -y mongodb-org",
+        "start": "systemctl start mongod",
+        "stop": "systemctl stop mongod",
+        "restart": "systemctl restart mongod",
+        "status": "systemctl status mongod",
+        "check": "systemctl is-active mongod",
+        "test": "mongod --version"
+      }
+    },
+    "redis": {
+      "displayName": "Redis Cache",
+      "description": "In-memory data structure store, used as database, cache, and message broker",
+      "category": "database",
+      "commands": {
+        "install": "apt update && apt install -y redis-server",
+        "start": "systemctl start redis-server",
+        "stop": "systemctl stop redis-server",
+        "restart": "systemctl restart redis-server",
+        "status": "systemctl status redis-server",
+        "check": "systemctl is-active redis-server",
+        "test": "redis-cli --version"
+      }
+    },
+    "sqlite": {
+      "displayName": "SQLite Database",
+      "description": "Lightweight, serverless SQL database engine",
+      "category": "database",
+      "commands": {
+        "install": "apt update && apt install -y sqlite3 libsqlite3-dev",
+        "check": "sqlite3 --version",
+        "test": "sqlite3 --version"
+      }
+    },
+    "cassandra": {
+      "displayName": "Apache Cassandra",
+      "description": "Distributed NoSQL database for handling large amounts of data",
+      "category": "database",
+      "commands": {
+        "install": "curl -fsSL https://www.apache.org/dist/cassandra/KEYS | gpg --dearmor -o /usr/share/keyrings/cassandra-archive-keyring.gpg && echo 'deb [signed-by=/usr/share/keyrings/cassandra-archive-keyring.gpg] https://downloads.apache.org/cassandra/debian/40x main' | tee /etc/apt/sources.list.d/cassandra.list && apt update && apt install -y cassandra",
+        "start": "systemctl start cassandra",
+        "stop": "systemctl stop cassandra",
+        "restart": "systemctl restart cassandra",
+        "status": "systemctl status cassandra",
+        "check": "systemctl is-active cassandra",
+        "test": "cqlsh --version"
+      }
+    },
+    "elasticsearch": {
+      "displayName": "Elasticsearch",
+      "description": "Distributed search and analytics engine",
+      "category": "database",
+      "commands": {
+        "install": "curl -fsSL https://artifacts.elastic.co/GPG-KEY-elasticsearch | gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg && echo 'deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main' | tee /etc/apt/sources.list.d/elastic-8.x.list && apt update && apt install -y elasticsearch",
+        "start": "systemctl start elasticsearch",
+        "stop": "systemctl stop elasticsearch",
+        "restart": "systemctl restart elasticsearch",
+        "status": "systemctl status elasticsearch",
+        "check": "systemctl is-active elasticsearch",
+        "test": "curl -X GET 'localhost:9200'"
+      }
+    },
+    "influxdb": {
+      "displayName": "InfluxDB",
+      "description": "Time series database for monitoring and analytics",
+      "category": "database",
+      "commands": {
+        "install": "curl -fsSL https://repos.influxdata.com/influxdb.key | gpg --dearmor -o /usr/share/keyrings/influxdb-archive-keyring.gpg && echo 'deb [signed-by=/usr/share/keyrings/influxdb-archive-keyring.gpg] https://repos.influxdata.com/debian stable main' | tee /etc/apt/sources.list.d/influxdb.list && apt update && apt install -y influxdb2",
+        "start": "systemctl start influxdb",
+        "stop": "systemctl stop influxdb",
+        "restart": "systemctl restart influxdb",
+        "status": "systemctl status influxdb",
+        "check": "systemctl is-active influxdb",
+        "test": "influx version"
+      }
+    },
+    "neo4j": {
+      "displayName": "Neo4j Graph Database",
+      "description": "Graph database management system",
+      "category": "database",
+      "commands": {
+        "install": "curl -fsSL https://debian.neo4j.com/neotechnology.gpg.key | gpg --dearmor -o /usr/share/keyrings/neo4j.gpg && echo 'deb [signed-by=/usr/share/keyrings/neo4j.gpg] https://debian.neo4j.com stable 5' | tee /etc/apt/sources.list.d/neo4j.list && apt update && apt install -y neo4j",
+        "start": "systemctl start neo4j",
+        "stop": "systemctl stop neo4j",
+        "restart": "systemctl restart neo4j",
+        "status": "systemctl status neo4j",
+        "check": "systemctl is-active neo4j",
+        "test": "neo4j version"
+      }
+    },
+    "couchdb": {
+      "displayName": "Apache CouchDB",
+      "description": "Document-oriented NoSQL database",
+      "category": "database",
+      "commands": {
+        "install": "curl -fsSL https://couchdb.apache.org/repo/keys.asc | gpg --dearmor -o /usr/share/keyrings/couchdb-archive-keyring.gpg && echo 'deb [signed-by=/usr/share/keyrings/couchdb-archive-keyring.gpg] https://apache.jfrog.io/artifactory/couchdb-deb/ jammy main' | tee /etc/apt/sources.list.d/couchdb.list && apt update && apt install -y couchdb",
+        "start": "systemctl start couchdb",
+        "stop": "systemctl stop couchdb",
+        "restart": "systemctl restart couchdb",
+        "status": "systemctl status couchdb",
+        "check": "systemctl is-active couchdb",
+        "test": "curl -X GET 'http://localhost:5984'"
+      }
+    },
+    "database-tools": {
+      "displayName": "Database Management Tools",
+      "description": "Essential tools for database administration and management",
+      "category": "database",
+      "commands": {
+        "install": "apt update && apt install -y pgadmin4 mysql-workbench dbeaver-ce phpmyadmin adminer",
+        "check": "which pgadmin4 && which mysql-workbench",
+        "test": "pgadmin4 --version"
+      }
+    },
+    "database-backup": {
+      "displayName": "Database Backup Tools",
+      "description": "Tools for database backup and recovery",
+      "category": "database",
+      "commands": {
+        "install": "apt update && apt install -y pg_dump mysqldump mongodump redis-cli",
+        "check": "which pg_dump && which mysqldump && which mongodump",
+        "test": "pg_dump --version && mysqldump --version"
+      }
+    }
+  }
+}
