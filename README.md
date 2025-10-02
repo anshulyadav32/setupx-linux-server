@@ -208,10 +208,13 @@ curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/m
 curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh setcp -p postgresql newpass123
 
 # Reset MySQL password
-curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh setcp -p mysql newpass123
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh reset-mysql -p mysql123
 
 # Reset MongoDB password
-curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh setcp -p mongodb newpass123
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh reset-mongodb -p mongodb123
+
+# Reset MariaDB password
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh reset-mariadb -p mariadb123
 ```
 
 ### **Web Server & Domain Setup**
@@ -222,8 +225,23 @@ curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/m
 # Deploy application with PM2
 curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh pm2-deploy -n myapp -p 3000 -d /var/www/myapp
 
-# Enable GCP root login
-curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh gcprootlogin -p rootpass ubuntupass
+# Deploy Node.js app from Git
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh deploy-node-git -w myapp -a myapp -g https://github.com/user/repo.git
+
+# Setup SSL certificate
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh ssl-setup -d example.com
+```
+
+### **System Management Scripts**
+```bash
+# Enable SSH root login
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh final-ssh-root-login -p rootpass
+
+# Update all system packages
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh update-all -y
+
+# Setup PostgreSQL for remote access
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh postgres-remote -p 5432
 ```
 
 ## 🚀 Complete Workflow Examples
