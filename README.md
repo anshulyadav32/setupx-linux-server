@@ -123,11 +123,14 @@ setupx -sh backup-system
 
 ### **Launch Interactive Menu**
 ```bash
-# Start the interactive menu system
+# Start the main interactive menu system
 curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx menu
+
+# Start the dedicated scripts menu
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx scripts-menu
 ```
 
-### **Menu Features**
+### **Main Menu Features**
 - **📦 Install Components** - Install by module or individual components
 - **🔧 Run Scripts** - Execute scripts with interactive selection
 - **📋 List Modules** - Browse and explore available modules
@@ -136,8 +139,27 @@ curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/m
 - **❓ Help** - Access help documentation
 - **🚪 Exit** - Clean exit from menu
 
+### **Scripts-Only Menu Features**
+- **🌐 Nginx Domain Setup** - Configure domains with SSL
+- **🚀 PM2 Deployment** - Deploy applications with PM2
+- **🗄️ Database Management** - Comprehensive database operations
+- **🔐 Security Setup** - SSH, firewall, SSL configuration
+- **📊 System Administration** - Updates, backups, monitoring
+- **🔧 Development Tools** - Docker, Kubernetes, development stack
+- **📋 List All Scripts** - Browse all available scripts
+- **🔙 Back to Main Menu** - Return to main menu
+
+### **Guided Input Forms**
+All script categories include guided input forms with:
+- **Step-by-step prompts** for complex configurations
+- **Smart defaults** for common scenarios
+- **Input validation** with error handling
+- **Command preview** before execution
+- **Confirmation prompts** for safety
+- **Back navigation** for easy correction
+
 ### **Menu Navigation**
-- **Number Selection** - Choose options by entering numbers (1-7)
+- **Number Selection** - Choose options by entering numbers
 - **Back Navigation** - Return to previous menus with back options
 - **Input Validation** - Invalid selections show error messages
 - **Clear Screen** - Clean interface with screen clearing
@@ -178,13 +200,16 @@ Based on [Anshul Yadav's GitHub profile](https://github.com/anshulyadav32), Setu
 ### **View All Scripts**
 ```bash
 # List all available scripts
-curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh list
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx scripts
 
 # Show script help
-curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh help
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx help
 
 # Interactive menu system
 curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx menu
+
+# Scripts-only menu system
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx scripts-menu
 ```
 
 ### **Available Scripts Overview**
@@ -208,6 +233,86 @@ curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/m
 | `database-reset` | Reset database passwords and configurations | `setupx -sh database-reset <database> [password]` |
 | `database-backup` | Create database backups | `setupx -sh database-backup <database> [backup_dir]` |
 | `database-status` | Check database system status | `setupx -sh database-status` |
+
+## 🔧 Scripts-Only Menu System
+
+### **Launch Scripts Menu**
+```bash
+# Start the dedicated scripts menu
+setupx scripts-menu
+```
+
+### **Script Categories**
+
+#### **🌐 Nginx Scripts**
+- **Setup Nginx Domain (Guided)** - Interactive domain configuration
+- **Setup SSL Certificate (Guided)** - SSL setup with Let's Encrypt
+- **List Nginx Scripts** - Browse available Nginx scripts
+
+#### **🚀 PM2 Scripts**
+- **PM2 Deployment (Guided)** - Deploy applications with PM2
+- **Deploy from Git (Guided)** - Deploy Node.js apps from Git repositories
+- **List PM2 Scripts** - Browse available PM2 scripts
+
+#### **🗄️ Database Scripts**
+- **Install Database** - Install any supported database system
+- **Reset Database Password** - Reset passwords for all database types
+- **Create Database Backup** - Backup PostgreSQL, MySQL, MongoDB
+- **Check Database Status** - Monitor database system health
+- **Database Manager** - Comprehensive database management
+- **List Database Scripts** - Browse all database-related scripts
+
+#### **🔐 Security Scripts**
+- **Enable SSH Root Login** - Configure SSH root access
+- **Setup UFW Firewall** - Configure firewall rules
+- **Install Fail2Ban** - Intrusion prevention system
+- **Setup SSL Certificate** - SSL certificate management
+- **List Security Scripts** - Browse security-related scripts
+
+#### **📊 System Administration Scripts**
+- **System Update** - Update all system packages
+- **System Backup** - Create system backups
+- **System Status** - Check system health
+- **PostgreSQL Remote Setup** - Configure remote database access
+- **List System Scripts** - Browse system administration scripts
+
+#### **🔧 Development Tools Scripts**
+- **Install Development Stack** - Complete development environment
+- **Docker Setup** - Container platform installation
+- **Kubernetes Setup** - Kubernetes command-line tools
+- **List Development Scripts** - Browse development tools
+
+### **Guided Input Examples**
+
+#### **Nginx Domain Setup**
+```bash
+# Interactive prompts:
+# Enter domain name: example.com
+# Enter backend port: 3000
+# Enable SSL? [y]: y
+# Command: setupx -sh nginx-domain -d example.com -p 3000 -s
+# Execute? [y]: y
+```
+
+#### **PM2 Deployment**
+```bash
+# Interactive prompts:
+# Enter application name: myapp
+# Enter application port: 3000
+# Enter application directory: /var/www/myapp
+# Select environment: 1) development 2) production 3) staging
+# Command: setupx -sh pm2-deploy -n myapp -p 3000 -d /var/www/myapp -e development
+# Execute? [y]: y
+```
+
+#### **Database Management**
+```bash
+# Interactive prompts:
+# Select database: 1) PostgreSQL 2) MySQL 3) MongoDB 4) Redis
+# Enter new password: newpass123
+# Command: setupx -sh database-reset postgresql newpass123
+# Execute? [y]: y
+```
 
 ## ⚡ One-Liner Component Installation
 
