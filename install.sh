@@ -6,11 +6,8 @@ echo "🚀 SetupX Linux - One Line Installer"
 echo "===================================="
 echo ""
 
-# Check if running as root, if not, restart with sudo
-if [ "$EUID" -ne 0 ]; then
-    echo "🔄 Restarting installer with root privileges..."
-    exec sudo "$0" "$@"
-fi
+# Always run as root - no check needed
+echo "🔧 Running SetupX installer as root..."
 
 # Update and upgrade system
 echo "🔄 Updating and upgrading system packages..."
@@ -119,8 +116,10 @@ chmod +x "$INSTALL_DIR/scripts/setcp.sh"
 
 # Create symlinks
 echo "🔗 Creating symlinks..."
-rm -f /usr/local/bin/setupx
-rm -f /usr/local/bin/wsx
+# Remove existing files/directories
+rm -rf /usr/local/bin/setupx
+rm -rf /usr/local/bin/wsx
+# Create symlinks to the main script
 ln -s "$INSTALL_DIR/setupx.sh" /usr/local/bin/setupx
 ln -s "$INSTALL_DIR/setupx.sh" /usr/local/bin/wsx
 
@@ -138,6 +137,9 @@ echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> /et
 export NVM_DIR="/root/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# Refresh environment
+export PATH="/usr/local/bin:$PATH"
 
 # Clean up
 cd "$HOME"
@@ -207,3 +209,6 @@ echo "💡 Note: If 'setupx' command is not found, run:"
 echo "  source /etc/bash.bashrc"
 echo "  or"
 echo "  export PATH=\"/usr/local/bin:\$PATH\""
+echo ""
+echo "🔄 To refresh environment immediately:"
+echo "  source /etc/bash.bashrc && setupx help"
