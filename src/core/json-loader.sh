@@ -3,7 +3,7 @@
 # Handles loading and parsing JSON configuration files
 
 get_setupx_config() {
-    local config_path="$SCRIPT_DIR/../config/setupx.json"
+    local config_path="$SCRIPT_DIR/config.json"
     
     if [ -f "$config_path" ]; then
         cat "$config_path"
@@ -16,7 +16,7 @@ get_setupx_config() {
 get_module_config() {
     local module_name="$1"
     
-    local module_path="$SCRIPT_DIR/../config/modules/$module_name.json"
+    local module_path="$SCRIPT_DIR/src/config/modules/$module_name.json"
     
     if [ -f "$module_path" ]; then
         cat "$module_path"
@@ -28,7 +28,7 @@ get_module_config() {
 
 get_all_module_configs() {
     local all_modules="[]"
-    local modules_path="$SCRIPT_DIR/../config/modules"
+    local modules_path="$SCRIPT_DIR/src/config/modules"
     
     if [ -d "$modules_path" ]; then
         for json_file in "$modules_path"/*.json; do
@@ -44,7 +44,7 @@ get_all_module_configs() {
 
 save_setupx_config() {
     local config="$1"
-    local config_path="$SCRIPT_DIR/../config/setupx.json"
+    local config_path="$SCRIPT_DIR/config.json"
     
     if echo "$config" | jq . >/dev/null 2>&1; then
         echo "$config" > "$config_path"
@@ -62,7 +62,7 @@ new_module_config() {
     local description="$3"
     local category="${4:-development}"
     
-    local module_path="$SCRIPT_DIR/../config/modules/$module_name.json"
+    local module_path="$SCRIPT_DIR/src/config/modules/$module_name.json"
     
     local module_template=$(cat <<EOF
 {
