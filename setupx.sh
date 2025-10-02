@@ -72,6 +72,7 @@ show_help() {
     echo "    install-module <module>       Install all components in a module"
     echo "    list-module <module>          List components in a specific module"
     echo "    scripts                       List all available scripts"
+    echo "    scripts-menu                  Scripts-only interactive menu"
     echo "    menu                          Interactive menu system"
     echo "    search <query>                Search for components"
     echo "    -sh <script> [args]           Run a script with arguments"
@@ -87,6 +88,7 @@ show_help() {
     echo "    setupx install-module web-development  # Install all web dev tools"
     echo "    setupx list-module package-managers    # List package managers"
     echo "    setupx scripts                # List all available scripts"
+    echo "    setupx scripts-menu           # Scripts-only interactive menu"
     echo "    setupx menu                   # Interactive menu system"
     echo "    setupx search docker          # Search for Docker component"
     echo "    setupx -sh gcprootlogin -p rootpass ubuntupass  # Enable GCP root login"
@@ -1009,6 +1011,483 @@ menu_ssl_guided() {
     fi
 }
 
+invoke_scripts_menu() {
+    while true; do
+        clear
+        show_banner
+        echo ""
+        echo "🔧 SetupX Scripts Menu"
+        echo "======================"
+        echo ""
+        echo "1) 🌐 Nginx Domain Setup"
+        echo "2) 🚀 PM2 Deployment"
+        echo "3) 🗄️ Database Management"
+        echo "4) 🔐 Security Setup"
+        echo "5) 📊 System Administration"
+        echo "6) 🔧 Development Tools"
+        echo "7) 📋 List All Scripts"
+        echo "8) 🔙 Back to Main Menu"
+        echo ""
+        read -p "Select a script category (1-8): " choice
+        
+        case $choice in
+            1)
+                menu_nginx_scripts
+                ;;
+            2)
+                menu_pm2_scripts
+                ;;
+            3)
+                menu_database_scripts
+                ;;
+            4)
+                menu_security_scripts
+                ;;
+            5)
+                menu_system_scripts
+                ;;
+            6)
+                menu_development_scripts
+                ;;
+            7)
+                invoke_list_scripts
+                read -p "Press Enter to continue..."
+                ;;
+            8)
+                return
+                ;;
+            *)
+                echo "❌ Invalid option. Please select 1-8."
+                sleep 2
+                ;;
+        esac
+    done
+}
+
+menu_nginx_scripts() {
+    while true; do
+        clear
+        echo "🌐 Nginx Scripts"
+        echo "================"
+        echo ""
+        echo "1) 🌐 Setup Nginx Domain (Guided)"
+        echo "2) 🔒 Setup SSL Certificate (Guided)"
+        echo "3) 📋 List Nginx Scripts"
+        echo "4) 🔙 Back to Scripts Menu"
+        echo ""
+        read -p "Select an option (1-4): " choice
+        
+        case $choice in
+            1)
+                menu_nginx_domain_guided
+                ;;
+            2)
+                menu_ssl_guided
+                ;;
+            3)
+                echo ""
+                echo "🌐 Available Nginx Scripts:"
+                echo "  - nginx-domain: Configure Nginx domain with SSL"
+                echo "  - ssl-setup: Setup SSL certificates with Let's Encrypt"
+                read -p "Press Enter to continue..."
+                ;;
+            4)
+                return
+                ;;
+            *)
+                echo "❌ Invalid option. Please select 1-4."
+                sleep 2
+                ;;
+        esac
+    done
+}
+
+menu_pm2_scripts() {
+    while true; do
+        clear
+        echo "🚀 PM2 Scripts"
+        echo "=============="
+        echo ""
+        echo "1) 🚀 PM2 Deployment (Guided)"
+        echo "2) 📦 Deploy from Git (Guided)"
+        echo "3) 📋 List PM2 Scripts"
+        echo "4) 🔙 Back to Scripts Menu"
+        echo ""
+        read -p "Select an option (1-4): " choice
+        
+        case $choice in
+            1)
+                menu_pm2_deploy_guided
+                ;;
+            2)
+                menu_pm2_git_guided
+                ;;
+            3)
+                echo ""
+                echo "🚀 Available PM2 Scripts:"
+                echo "  - pm2-deploy: Deploy application with PM2"
+                echo "  - deploy-node-git: Deploy Node.js app from Git repository"
+                read -p "Press Enter to continue..."
+                ;;
+            4)
+                return
+                ;;
+            *)
+                echo "❌ Invalid option. Please select 1-4."
+                sleep 2
+                ;;
+        esac
+    done
+}
+
+menu_pm2_git_guided() {
+    clear
+    echo "📦 Deploy from Git (Guided)"
+    echo "==========================="
+    echo ""
+    echo "This will help you deploy a Node.js application from a Git repository."
+    echo ""
+    
+    # Get web name
+    read -p "Enter web application name (e.g., myapp): " web_name
+    if [ -z "$web_name" ]; then
+        echo "❌ Web application name is required"
+        sleep 2
+        return
+    fi
+    
+    # Get app name
+    read -p "Enter PM2 application name (e.g., myapp-pm2): " app_name
+    app_name=${app_name:-${web_name}-pm2}
+    
+    # Get git URL
+    read -p "Enter Git repository URL: " git_url
+    if [ -z "$git_url" ]; then
+        echo "❌ Git repository URL is required"
+        sleep 2
+        return
+    fi
+    
+    # Get port
+    read -p "Enter application port (default: 3000): " port
+    port=${port:-3000}
+    
+    # Build command
+    local command="setupx -sh deploy-node-git -w $web_name -a $app_name -g $git_url -p $port"
+    
+    echo ""
+    echo "📦 Command to execute:"
+    echo "$command"
+    echo ""
+    read -p "Execute this command? (y/n) [y]: " execute
+    execute=${execute:-y}
+    
+    if [ "$execute" = "y" ] || [ "$execute" = "Y" ]; then
+        echo ""
+        echo "📦 Deploying from Git: $web_name"
+        eval "$command"
+        read -p "Press Enter to continue..."
+    else
+        echo "❌ Command cancelled"
+        sleep 2
+    fi
+}
+
+menu_database_scripts() {
+    while true; do
+        clear
+        echo "🗄️ Database Scripts"
+        echo "==================="
+        echo ""
+        echo "1) 📦 Install Database"
+        echo "2) 🔄 Reset Database Password"
+        echo "3) 💾 Create Database Backup"
+        echo "4) 📊 Check Database Status"
+        echo "5) 🔧 Database Manager"
+        echo "6) 📋 List Database Scripts"
+        echo "7) 🔙 Back to Scripts Menu"
+        echo ""
+        read -p "Select an option (1-7): " choice
+        
+        case $choice in
+            1)
+                menu_database_install_guided
+                ;;
+            2)
+                menu_database_reset_guided
+                ;;
+            3)
+                menu_database_backup_guided
+                ;;
+            4)
+                echo ""
+                echo "📊 Checking database status..."
+                invoke_script "database-status"
+                read -p "Press Enter to continue..."
+                ;;
+            5)
+                menu_database_manager_guided
+                ;;
+            6)
+                echo ""
+                echo "🗄️ Available Database Scripts:"
+                echo "  - database-manager: Comprehensive database management"
+                echo "  - database-reset: Reset database passwords"
+                echo "  - database-backup: Create database backups"
+                echo "  - database-status: Check database status"
+                echo "  - setcp: Database password manager"
+                echo "  - reset-postgres: Reset PostgreSQL database"
+                echo "  - reset-mysql: Reset MySQL database"
+                echo "  - reset-mongodb: Reset MongoDB database"
+                read -p "Press Enter to continue..."
+                ;;
+            7)
+                return
+                ;;
+            *)
+                echo "❌ Invalid option. Please select 1-7."
+                sleep 2
+                ;;
+        esac
+    done
+}
+
+menu_database_manager_guided() {
+    clear
+    echo "🔧 Database Manager (Guided)"
+    echo "==========================="
+    echo ""
+    echo "Available database actions:"
+    echo "1) Install PostgreSQL"
+    echo "2) Install MySQL"
+    echo "3) Install MariaDB"
+    echo "4) Install MongoDB"
+    echo "5) Install Redis"
+    echo "6) Install Cassandra"
+    echo "7) Install Elasticsearch"
+    echo "8) Install Neo4j"
+    echo "9) Install InfluxDB"
+    echo "10) Install CouchDB"
+    echo "11) Install SQLite"
+    echo "12) Install Database Tools"
+    echo ""
+    read -p "Select database action (1-12): " action_choice
+    
+    case $action_choice in
+        1) action="install-postgresql" ;;
+        2) action="install-mysql" ;;
+        3) action="install-mariadb" ;;
+        4) action="install-mongodb" ;;
+        5) action="install-redis" ;;
+        6) action="install-cassandra" ;;
+        7) action="install-elasticsearch" ;;
+        8) action="install-neo4j" ;;
+        9) action="install-influxdb" ;;
+        10) action="install-couchdb" ;;
+        11) action="install-sqlite" ;;
+        12) action="install-tools" ;;
+        *)
+            echo "❌ Invalid selection"
+            sleep 2
+            return
+            ;;
+    esac
+    
+    echo ""
+    echo "🔧 Executing database manager: $action"
+    invoke_script "database-manager" "$action"
+    read -p "Press Enter to continue..."
+}
+
+menu_security_scripts() {
+    while true; do
+        clear
+        echo "🔐 Security Scripts"
+        echo "=================="
+        echo ""
+        echo "1) 🔑 Enable SSH Root Login"
+        echo "2) 🛡️ Setup UFW Firewall"
+        echo "3) 🚫 Install Fail2Ban"
+        echo "4) 🔒 Setup SSL Certificate"
+        echo "5) 📋 List Security Scripts"
+        echo "6) 🔙 Back to Scripts Menu"
+        echo ""
+        read -p "Select an option (1-6): " choice
+        
+        case $choice in
+            1)
+                menu_ssh_root_guided
+                ;;
+            2)
+                echo ""
+                echo "🛡️ Setting up UFW firewall..."
+                invoke_script "system-security" "ufw"
+                read -p "Press Enter to continue..."
+                ;;
+            3)
+                echo ""
+                echo "🚫 Installing Fail2Ban..."
+                invoke_script "system-security" "fail2ban"
+                read -p "Press Enter to continue..."
+                ;;
+            4)
+                menu_ssl_guided
+                ;;
+            5)
+                echo ""
+                echo "🔐 Available Security Scripts:"
+                echo "  - final-ssh-root-login: Enable SSH root login"
+                echo "  - ssl-setup: Setup SSL certificates"
+                echo "  - system-security: UFW firewall and Fail2Ban"
+                read -p "Press Enter to continue..."
+                ;;
+            6)
+                return
+                ;;
+            *)
+                echo "❌ Invalid option. Please select 1-6."
+                sleep 2
+                ;;
+        esac
+    done
+}
+
+menu_system_scripts() {
+    while true; do
+        clear
+        echo "📊 System Administration Scripts"
+        echo "==============================="
+        echo ""
+        echo "1) 🔄 System Update"
+        echo "2) 💾 System Backup"
+        echo "3) 📊 System Status"
+        echo "4) 🔧 PostgreSQL Remote Setup"
+        echo "5) 📋 List System Scripts"
+        echo "6) 🔙 Back to Scripts Menu"
+        echo ""
+        read -p "Select an option (1-6): " choice
+        
+        case $choice in
+            1)
+                echo ""
+                echo "🔄 Updating system..."
+                invoke_script "update-all" "-y"
+                read -p "Press Enter to continue..."
+                ;;
+            2)
+                echo ""
+                echo "💾 Creating system backup..."
+                invoke_script "backup-system"
+                read -p "Press Enter to continue..."
+                ;;
+            3)
+                menu_system_status
+                ;;
+            4)
+                menu_postgres_remote_guided
+                ;;
+            5)
+                echo ""
+                echo "📊 Available System Scripts:"
+                echo "  - update-all: Update all system packages"
+                echo "  - backup-system: Create system backup"
+                echo "  - postgres-remote: Configure PostgreSQL for remote access"
+                read -p "Press Enter to continue..."
+                ;;
+            6)
+                return
+                ;;
+            *)
+                echo "❌ Invalid option. Please select 1-6."
+                sleep 2
+                ;;
+        esac
+    done
+}
+
+menu_postgres_remote_guided() {
+    clear
+    echo "🔧 PostgreSQL Remote Setup (Guided)"
+    echo "==================================="
+    echo ""
+    read -p "Enter PostgreSQL port (default: 5432): " port
+    port=${port:-5432}
+    
+    read -p "Enter allowed IP addresses (default: 0.0.0.0/0): " allowed_ips
+    allowed_ips=${allowed_ips:-0.0.0.0/0}
+    
+    local command="setupx -sh postgres-remote -p $port -i $allowed_ips"
+    
+    echo ""
+    echo "🔧 Command to execute:"
+    echo "$command"
+    echo ""
+    read -p "Execute this command? (y/n) [y]: " execute
+    execute=${execute:-y}
+    
+    if [ "$execute" = "y" ] || [ "$execute" = "Y" ]; then
+        echo ""
+        echo "🔧 Setting up PostgreSQL remote access..."
+        eval "$command"
+        read -p "Press Enter to continue..."
+    else
+        echo "❌ Command cancelled"
+        sleep 2
+    fi
+}
+
+menu_development_scripts() {
+    while true; do
+        clear
+        echo "🔧 Development Tools Scripts"
+        echo "==========================="
+        echo ""
+        echo "1) 📦 Install Development Stack"
+        echo "2) 🐳 Docker Setup"
+        echo "3) ☸️ Kubernetes Setup"
+        echo "4) 📋 List Development Scripts"
+        echo "5) 🔙 Back to Scripts Menu"
+        echo ""
+        read -p "Select an option (1-5): " choice
+        
+        case $choice in
+            1)
+                echo ""
+                echo "📦 Installing development stack..."
+                invoke_script "install-module" "web-development"
+                read -p "Press Enter to continue..."
+                ;;
+            2)
+                echo ""
+                echo "🐳 Setting up Docker..."
+                invoke_script "install" "docker"
+                read -p "Press Enter to continue..."
+                ;;
+            3)
+                echo ""
+                echo "☸️ Setting up Kubernetes..."
+                invoke_script "install" "kubectl"
+                read -p "Press Enter to continue..."
+                ;;
+            4)
+                echo ""
+                echo "🔧 Available Development Scripts:"
+                echo "  - web-development: Complete web development stack"
+                echo "  - docker: Container platform"
+                echo "  - kubectl: Kubernetes command-line tool"
+                read -p "Press Enter to continue..."
+                ;;
+            5)
+                return
+                ;;
+            *)
+                echo "❌ Invalid option. Please select 1-5."
+                sleep 2
+                ;;
+        esac
+    done
+}
+
 invoke_search() {
     local query="$1"
     
@@ -1188,6 +1667,9 @@ case "$1" in
         ;;
     "menu")
         invoke_interactive_menu
+        ;;
+    "scripts-menu")
+        invoke_scripts_menu
         ;;
     "search")
         invoke_search "$2"
