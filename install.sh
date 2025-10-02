@@ -18,9 +18,10 @@ apt autoclean
 
 # Fix PostgreSQL key deprecation warning
 echo "🔧 Fixing PostgreSQL key deprecation..."
+# Remove the deprecated key and add the new one
 if [ -f "/etc/apt/trusted.gpg" ]; then
-    # Convert legacy key to new format
-    apt-key export 7FCC7D46ACCC4CF8 | gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg 2>/dev/null || true
+    # Download and add PostgreSQL key in new format
+    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg 2>/dev/null || true
 fi
 
 # Handle any remaining upgradable packages
