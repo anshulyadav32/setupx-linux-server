@@ -71,6 +71,7 @@ show_help() {
     echo "    test <component>              Test component functionality"
     echo "    install-module <module>       Install all components in a module"
     echo "    list-module <module>          List components in a specific module"
+    echo "    scripts                       List all available scripts"
     echo "    search <query>                Search for components"
     echo "    -sh <script> [args]           Run a script with arguments"
     echo "    version                       Show SetupX version"
@@ -84,6 +85,7 @@ show_help() {
     echo "    setupx check curl             # Check if cURL is installed"
     echo "    setupx install-module web-development  # Install all web dev tools"
     echo "    setupx list-module package-managers    # List package managers"
+    echo "    setupx scripts                # List all available scripts"
     echo "    setupx search docker          # Search for Docker component"
     echo "    setupx -sh gcprootlogin -p rootpass ubuntupass  # Enable GCP root login"
     echo "    setupx -sh system-update    # Update system packages"
@@ -355,6 +357,24 @@ invoke_list_module() {
     done
 }
 
+invoke_list_scripts() {
+    echo ""
+    echo "Available Scripts:"
+    echo "=================="
+    
+    local scripts_module=$(get_module_config "scripts")
+    if [ "$scripts_module" != "null" ] && [ -n "$scripts_module" ]; then
+        echo "$scripts_module" | jq -r '.components[] | "  \(.name) - \(.displayName)\n    \(.description)\n    Usage: \(.usage)\n"' 2>/dev/null || echo "  Error loading scripts from configuration"
+    else
+        echo "  Error: Scripts module not found"
+        echo "  Make sure the scripts module is properly configured"
+    fi
+    
+    echo ""
+    echo "Use 'setupx -sh <script-name> [arguments]' to run a script"
+    echo "Use 'setupx -sh' to see available scripts with descriptions"
+}
+
 invoke_search() {
     local query="$1"
     
@@ -393,12 +413,14 @@ invoke_script() {
         echo "Usage: setupx -sh <script-name> [arguments]"
         echo ""
         echo "Available scripts:"
-        echo "  gcprootlogin    - Enable root login for GCP VM"
-        echo "  system-update   - Update system packages"
-        echo "  backup-system   - Create system backup"
-        echo "  setcp           - Reset database passwords (PostgreSQL, MySQL, MongoDB)"
-        echo "  nginx-domain    - Configure new domain in Nginx with SSL"
-        echo "  pm2-deploy      - Deploy application with PM2 and port configuration"
+        
+        # Get scripts from JSON configuration
+        local scripts_module=$(get_module_config "scripts")
+        if [ "$scripts_module" != "null" ]; then
+            echo "$scripts_module" | jq -r '.components[] | "  \(.name) - \(.description)"' 2>/dev/null || echo "  Error loading scripts from configuration"
+        else
+            echo "  Error: Scripts module not found"
+        fi
         return 1
     fi
     
@@ -526,6 +548,9 @@ case "$1" in
         ;;
     "list-module")
         invoke_list_module "$2"
+        ;;
+    "scripts")
+        invoke_list_scripts
         ;;
     "search")
         invoke_search "$2"

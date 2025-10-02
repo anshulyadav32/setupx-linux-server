@@ -119,6 +119,35 @@ setupx -sh backup-system
 - **devops**: Docker, Kubernetes, CI/CD tools
 - **scripts**: Database management, Nginx setup, PM2 deployment
 
+## 📋 All Available Scripts
+
+### **View All Scripts**
+```bash
+# List all available scripts
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh list
+
+# Show script help
+curl -fsSL https://raw.githubusercontent.com/anshulyadav32/setupx-linux-server/master/install.sh | bash && setupx -sh help
+```
+
+### **Available Scripts Overview**
+| Script Name | Description | Usage |
+|-------------|-------------|-------|
+| `final-ssh-root-login` | Enable SSH root login with password | `setupx -sh final-ssh-root-login -p <password>` |
+| `install-postgres` | Install PostgreSQL with database setup | `setupx -sh install-postgres -d <db> -u <user> -p <pass>` |
+| `deploy-node-app` | Deploy Node.js application with PM2 | `setupx -sh deploy-node-app -d <domain> -a <app> -g <repo> -p <port>` |
+| `nginx-domain` | Configure Nginx domain with SSL | `setupx -sh nginx-domain -d <domain> -p <port> [-s]` |
+| `pm2-deploy` | Deploy application with PM2 | `setupx -sh pm2-deploy -n <app> -p <port> -d <dir> [-e <env>]` |
+| `setcp` | Reset database passwords | `setupx -sh setcp -p <database> <password>` |
+| `update-all` | Update all system packages | `setupx -sh update-all [-y] [--no-cleanup]` |
+| `reset-postgres` | Reset PostgreSQL database | `setupx -sh reset-postgres [-d <db>] [-u <user>] [-p <pass>]` |
+| `reset-mariadb` | Reset MariaDB database | `setupx -sh reset-mariadb [-d <db>] [-u <user>] [-p <pass>]` |
+| `reset-mysql` | Reset MySQL database | `setupx -sh reset-mysql [-d <db>] [-u <user>] [-p <pass>]` |
+| `reset-mongodb` | Reset MongoDB database | `setupx -sh reset-mongodb [-d <db>] [-u <user>] [-p <pass>]` |
+| `deploy-node-git` | Deploy Node.js app from Git | `setupx -sh deploy-node-git -w <web> -a <app> -g <git> [-p <port>]` |
+| `ssl-setup` | Setup SSL certificates | `setupx -sh ssl-setup -d <domain> [--no-www]` |
+| `postgres-remote` | Configure PostgreSQL for remote access | `setupx -sh postgres-remote [-p <port>] [-i <ips>]` |
+
 ## ⚡ One-Liner Component Installation
 
 ### **Package Managers**
