@@ -14,6 +14,11 @@ if [ -L "${BASH_SOURCE[0]}" ]; then
     SCRIPT_DIR="$(cd "$(dirname "$TARGET")" && pwd)"
 fi
 
+# Fallback: if modules still not found, try the standard installation directory
+if [ ! -f "$SCRIPT_DIR/src/utils/logger.sh" ]; then
+    SCRIPT_DIR="/usr/local/lib/setupx"
+fi
+
 # Import core modules
 source "$SCRIPT_DIR/src/utils/logger.sh"
 source "$SCRIPT_DIR/src/utils/helpers.sh"
